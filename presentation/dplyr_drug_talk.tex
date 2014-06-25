@@ -1,0 +1,365 @@
+% ---------------------------------------------------------------------------- %
+% file: dplyr_drug_talk.Rnw
+% author: Peter DeWitt <peter.dewitt@ucdenver.edu>
+%
+% presentation on dplyr, and as a result also magrittr, for the Denver R User
+% Group (DRUG) MeetUp on 1 July 2014.
+%
+% ---------------------------------------------------------------------------- %
+
+\documentclass{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage{verbatim}
+
+\author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
+\date{1 July 2014}
+\title{Introduction to {\tt dplyr} and {\tt magrittr}}
+\subtitle{Denver R Users Group\\www.meetup.com/DenverRUG}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+\begin{frame}[fragile]
+  \maketitle
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Goals:}
+
+  \begin{itemize}
+    \item Showcase {\tt dplyr}, compare the ease of use compared to base R.
+    \item Introduce the data manipulation grammar and philosophy behind {\tt
+      dplyr}
+    \item Illustrate the usefulness of the forward-piping operator which is
+      part of {\tt dplyr} and extended further in {\tt magrittr}.  
+  \end{itemize}
+
+  % \tableofcontents
+
+\end{frame} 
+
+\section{{\tt dplyr}}
+\begin{frame}[fragile]
+  \frametitle{{\tt dplyr}: a grammar of data manipulation}
+  \begin{itemize}
+    \item Authored by Hadley Wickham and Romain Francois
+    \item Current CRAN version 0.2
+
+    \item<2-> Paraphrasing from a post on the RStudio blog
+      \url{http://blog.rstudio.org/2014/01/17/introducing-dplyr}
+
+      \begin{itemize}
+        \item {\tt dplyr} is the next iteration of {\tt plyr}
+        \item focuses only on {\tt data.frame}s
+        \item faster, thanks in part to Francois work in {\tt Rcpp}, some use of
+          multiple processors.
+        \item improved API. 
+        \item interface with remote database (PostgreSQL, MySQL, SQLite, and
+          Google bigquery) tables using the same verbs for
+          interacting with {\tt data.frame}s.  (Extendible to other backends)
+        \item Common operations:
+          \begin{itemize}
+            \item {\tt group\_by}, {\tt summarize}, {\tt mutate}, {\tt filter},
+              {\tt select}, and {\tt arrange}.
+          \end{itemize}
+      \end{itemize}
+
+  \end{itemize}
+\end{frame} 
+
+\subsection{Data Import}
+
+\begin{frame}[fragile]
+  \frametitle{Data Import}
+  {\tt dplyr} does not have special tools for reading in data, but, if you need
+  to {\tt rbind} sets together\ldots 
+
+
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# FAAs wildlife strikes on aircraft since 1990.  The data}
+\hlcom{# can be downloaded, in a Microsoft Access DB,  from}
+\hlcom{# http://www.faa.gov/airports/airport_safety/wildlife/database/}
+\hlcom{# Tables in the DB were exported to csv files.  }
+\hlcom{# A data dictionary, in an Excel file, was also}
+\hlcom{# included in the download from faa.gov}
+
+\hlcom{# column classes are set (in R code not shown) to ensure}
+\hlcom{# that each column of the imported data is of the same class}
+\hlstd{wls.90.99} \hlkwb{<-}
+  \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (1990-1999).csv"}\hlstd{,}
+           \hlkwc{colClasses} \hlstd{= clclss)}
+\hlstd{wls.00.09} \hlkwb{<-}
+  \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (2000-2009).csv"}\hlstd{,}
+           \hlkwc{colClasses} \hlstd{= clclss)}
+\hlstd{wls.10.14} \hlkwb{<-}
+  \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (2010-Current).csv"}\hlstd{,}
+           \hlkwc{colClasses} \hlstd{= clclss)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+
+\begin{frame}[fragile]
+  \frametitle{Data Import}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Base does not require the columns to be of the same class,}
+\hlcom{# only the same name}
+\hlcom{# dplyr requires that the columnns are of the same class.}
+\hlkwd{dim}\hlstd{(wls.90.99)}
+\end{alltt}
+\begin{verbatim}
+## [1] 30150    94
+\end{verbatim}
+\begin{alltt}
+\hlkwd{nrow}\hlstd{(wls.90.99)} \hlopt{+} \hlkwd{nrow}\hlstd{(wls.00.09)} \hlopt{+} \hlkwd{nrow}\hlstd{(wls.10.14)}
+\end{alltt}
+\begin{verbatim}
+## [1] 142911
+\end{verbatim}
+\begin{alltt}
+\hlstd{bnchmrk} \hlkwb{<-}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{rbind}\hlstd{(wls.90.99, wls.00.09, wls.10.14),}
+            \hlkwc{dplyr} \hlstd{=} \hlkwd{rbind_list}\hlstd{(wls.90.99, wls.00.09, wls.10.14),}
+            \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
+\hlstd{bnchmrk[,} \hlkwd{c}\hlstd{(}\hlstr{"test"}\hlstd{,} \hlstr{"replications"}\hlstd{,} \hlstr{"elapsed"}\hlstd{,} \hlstr{"relative"}\hlstd{)]}
+\end{alltt}
+\begin{verbatim}
+##    test replications elapsed relative
+## 1  base          100   87.99    3.878
+## 2 dplyr          100   22.69    1.000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Data Import}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{wls_df} \hlkwb{<-} \hlkwd{rbind}\hlstd{(wls.90.99, wls.00.09, wls.10.14)}
+\hlkwd{class}\hlstd{(wls_df)}
+\end{alltt}
+\begin{verbatim}
+## [1] "data.frame"
+\end{verbatim}
+\begin{alltt}
+\hlstd{wls} \hlkwb{<-} \hlkwd{rbind_list}\hlstd{(wls.90.99, wls.00.09, wls.10.14)}
+\hlkwd{class}\hlstd{(wls)}
+\end{alltt}
+\begin{verbatim}
+## [1] "data.frame"
+\end{verbatim}
+\begin{alltt}
+\hlcom{# A data frame tbl wraps a local data frame. The main}
+\hlcom{# advantage to using a ‘tbl_df’ over a regular data frame is}
+\hlcom{# the printing: tbl objects only print a few rows and all}
+\hlcom{# the columns that fit on one screen, providing describing}
+\hlcom{# the rest of it as text. [source: R help doc]}
+\hlstd{wls_tbl_df} \hlkwb{<-} \hlkwd{tbl_df}\hlstd{(wls)}
+\hlkwd{class}\hlstd{(wls_tbl_df)}
+\end{alltt}
+\begin{verbatim}
+## [1] "tbl_df"     "tbl"        "data.frame"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Data Printing}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# print(wls_df)  # takes a long time, not helpful}
+\hlcom{# head(wls_df)   # two many columns to be useful}
+\hlkwd{print}\hlstd{(wls_tbl_df,} \hlkwc{n} \hlstd{=} \hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [142,911 x 94]
+## 
+##    INDEX_NR OPID          OPERATOR     ATYPE AMA AMO EMA EMO
+## 1    100000  AAL AMERICAN AIRLINES     B-727 148  10  34  10
+## 2    100001  UAL   UNITED AIRLINES B-737-300 148  24  10  01
+## ..      ...  ...               ...       ... ... ... ... ...
+## Variables not shown: AC_CLASS (chr), AC_MASS (int), NUM_ENGS
+##   (chr), TYPE_ENG (chr), ENG_1_POS (chr), ENG_2_POS (int),
+##   ENG_3_POS (chr), ENG_4_POS (int), REG (chr), FLT (chr),
+##   REMAINS_COLLECTED (lgl), REMAINS_SENT (lgl), INCIDENT_DATE
+##   (chr), INCIDENT_MONTH (int), INCIDENT_YEAR (int),
+##   TIME_OF_DAY (chr), TIME (int), AIRPORT_ID (chr), AIRPORT
+##   (chr), STATE (chr), FAAREGION (chr), ENROUTE (chr), RUNWAY
+##   (chr), LOCATION (chr), HEIGHT (int), SPEED (int), DISTANCE
+##   (dbl), PHASE_OF_FLT (chr), DAMAGE (chr), STR_RAD (lgl),
+##   DAM_RAD (lgl), STR_WINDSHLD (lgl), DAM_WINDSHLD (lgl),
+##   STR_NOSE (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl), DAM_ENG1
+##   (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl),
+##   DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl), INGESTED
+##   (lgl), STR_PROP (lgl), DAM_PROP (lgl), STR_WING_ROT (lgl),
+##   DAM_WING_ROT (lgl), STR_FUSE (lgl), DAM_FUSE (lgl), STR_LG
+##   (lgl), DAM_LG (lgl), STR_TAIL (lgl), DAM_TAIL (lgl),
+##   STR_LGHTS (lgl), DAM_LGHTS (lgl), STR_OTHER (lgl),
+##   DAM_OTHER (lgl), OTHER_SPECIFY (chr), EFFECT (chr),
+##   EFFECT_OTHER (chr), SKY (chr), PRECIP (chr), SPECIES_ID
+##   (chr), SPECIES (chr), BIRDS_SEEN (chr), BIRDS_STRUCK (chr),
+##   SIZE (chr), WARNED (chr), COMMENTS (chr), REMARKS (chr),
+##   AOS (int), COST_REPAIRS (int), COST_OTHER (int),
+##   COST_REPAIRS_INFL_ADJ (int), COST_OTHER_INFL_ADJ (int),
+##   REPORTED_NAME (chr), REPORTED_TITLE (chr), REPORTED_DATE
+##   (chr), SOURCE (chr), PERSON (chr), NR_INJURIES (int),
+##   NR_FATALITIES (int), LUPDATE (chr), TRANSFER (lgl),
+##   INDICATED_DAMAGE (lgl)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+
+\section{magrittr}%{{{
+\begin{frame}[fragile]
+  \frametitle{{\tt magrittr}: a forward-pipe operator for {\tt R}}
+  \framesubtitle{ceci n'est pas un pipe (this is not a pipe)}
+
+  \begin{itemize}
+    \item {\tt dplyr} funcationality is made more powerful via the \verb|%>%|,
+      or equivalently, \verb|\%.%$|, operator.
+
+      %     \item<2-> Additional functionally provided by the {\tt magrittr} package
+      %       authored by Stefan Bache and Hadley Wickham.
+      % 
+      %     \item<3-> These operators are similar to 
+      %       \begin{itemize} 
+      %         \item F\#'s $|>$, or
+      %         \item Linux's $|$.
+      %       \end{itemize}
+      % 
+      %     \item<4-> Use of these operators will drastically change your {\tt R} syntax.
+      % 
+      %     \item<5-> Helpful to writting complex, nested, operations.
+      %     \item<5->``Read from left to right instead of inside out.''
+
+  \end{itemize}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
+  \framesubtitle{Examples} 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{data}\hlstd{(diamonds,} \hlkwc{package} \hlstd{=} \hlstr{"ggplot2"}\hlstd{)}
+
+\hlcom{# find the mean price of the diamonds}
+\hlcom{# Standard R syntax}
+\hlkwd{mean}\hlstd{(diamonds}\hlopt{$}\hlstd{price)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3933
+\end{verbatim}
+\begin{alltt}
+\hlcom{# with the pipe}
+\hlstd{diamonds} \hlopt{%>%}
+\hlkwd{extract}\hlstd{(}\hlstr{"price"}\hlstd{)} \hlopt{%>%}
+\hlkwd{unlist}\hlstd{()} \hlopt{%>%}
+\hlkwd{mean}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] 3933
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+What's the point?
+\end{frame} 
+%}}}
+
+\begin{frame}[fragile]
+  \frametitle{Reproducibility}
+  The data, code, sides, etc.\ all at \url{github.com/dewittpe/dplyr-demo}
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{print}\hlstd{(}\hlkwd{sessionInfo}\hlstd{(),} \hlkwc{locale} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## R version 3.1.0 (2014-04-10)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets 
+## [6] methods   base     
+## 
+## other attached packages:
+## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1  
+## [4] knitr_1.6        vimcom_0.9-93    setwidth_1.0-3  
+## [7] colorout_1.0-3  
+## 
+## loaded via a namespace (and not attached):
+##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4   
+##  [4] evaluate_0.5.5  formatR_0.10    highr_0.3      
+##  [7] parallel_3.1.0  Rcpp_0.11.1     stringr_0.6.2  
+## [10] tools_3.1.0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+\end{document}
+

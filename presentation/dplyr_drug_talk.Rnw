@@ -1,0 +1,245 @@
+% ---------------------------------------------------------------------------- %
+% file: dplyr_drug_talk.Rnw
+% author: Peter DeWitt <peter.dewitt@ucdenver.edu>
+%
+% presentation on dplyr, and as a result also magrittr, for the Denver R User
+% Group (DRUG) MeetUp on 1 July 2014.
+%
+% ---------------------------------------------------------------------------- %
+
+\documentclass{beamer}
+
+\usepackage{verbatim}
+
+\author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
+\date{1 July 2014}
+\title{Introduction to {\tt dplyr} and {\tt magrittr}}
+\subtitle{Denver R Users Group\\www.meetup.com/DenverRUG}
+
+\begin{document}
+
+<<"setup", include = FALSE>>=
+options(stringsAsFactors = FALSE)
+options(width = 62)
+
+library(knitr)
+library(magrittr)
+library(dplyr)
+library(rbenchmark)
+
+citation("magrittr")
+citation("dplyr")
+
+opts_chunk$set(fig.align = "center",
+               fig.pos   = "!htp",
+               size      = "footnotesize", 
+               dev       = "pdf",
+               error     = FALSE,      # stop knitr if chunk has R error
+               tidy      = FALSE)
+
+@
+
+\begin{frame}[fragile]
+  \maketitle
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Goals:}
+
+  \begin{itemize}
+    \item Showcase {\tt dplyr}, compare the ease of use compared to base R.
+    \item Introduce the data manipulation grammar and philosophy behind {\tt
+      dplyr}
+    \item Illustrate the usefulness of the forward-piping operator which is
+      part of {\tt dplyr} and extended further in {\tt magrittr}.  
+  \end{itemize}
+
+  % \tableofcontents
+
+\end{frame} 
+
+\section{{\tt dplyr}}
+\begin{frame}[fragile]
+  \frametitle{{\tt dplyr}: a grammar of data manipulation}
+  \begin{itemize}
+    \item Authored by Hadley Wickham and Romain Francois
+    \item Current CRAN version 0.2
+
+    \item<2-> Paraphrasing from a post on the RStudio blog
+      \url{http://blog.rstudio.org/2014/01/17/introducing-dplyr}
+
+      \begin{itemize}
+        \item {\tt dplyr} is the next iteration of {\tt plyr}
+        \item focuses only on {\tt data.frame}s
+        \item faster, thanks in part to Francois work in {\tt Rcpp}, some use of
+          multiple processors.
+        \item improved API. 
+        \item interface with remote database (PostgreSQL, MySQL, SQLite, and
+          Google bigquery) tables using the same verbs for
+          interacting with {\tt data.frame}s.  (Extendible to other backends)
+        \item Common operations:
+          \begin{itemize}
+            \item {\tt group\_by}, {\tt summarize}, {\tt mutate}, {\tt filter},
+              {\tt select}, and {\tt arrange}.
+          \end{itemize}
+      \end{itemize}
+
+  \end{itemize}
+\end{frame} 
+
+\subsection{Data Import}
+
+\begin{frame}[fragile]
+  \frametitle{Data Import}
+  {\tt dplyr} does not have special tools for reading in data, but, if you need
+  to {\tt rbind} sets together\ldots 
+
+<<"data-read-setup", cache = TRUE, include = FALSE>>=
+# Read in the data sets
+wls.90.99 <- read.csv("../data/STRIKE_REPORTS (1990-1999).csv")
+wls.00.09 <- read.csv("../data/STRIKE_REPORTS (2000-2009).csv")
+wls.10.14 <- read.csv("../data/STRIKE_REPORTS (2010-Current).csv")
+
+# find the data classes 
+clclss.1 <- sapply(wls.90.99, class)
+clclss.2 <- sapply(wls.00.09, class)
+clclss.3 <- sapply(wls.10.14, class)
+
+# create a common class for all the data sets, setting 'character' as the class
+# if there is a mismatch
+clclss <- apply(data.frame(clclss.1, clclss.2, clclss.3), 1, 
+                function(x) { 
+                  if(x[1] == x[2] & x[1] == x[3]) { 
+                    return(x[1]) 
+                } else { 
+                  return("character") } 
+                })
+@
+
+<<"data-read", cache = TRUE, dependson = "data-read-setup">>=
+# FAAs wildlife strikes on aircraft since 1990.  The data
+# can be downloaded, in a Microsoft Access DB,  from
+# http://www.faa.gov/airports/airport_safety/wildlife/database/
+# Tables in the DB were exported to csv files.  
+# A data dictionary, in an Excel file, was also
+# included in the download from faa.gov
+
+# column classes are set (in R code not shown) to ensure
+# that each column of the imported data is of the same class
+wls.90.99 <- 
+  read.csv("../data/STRIKE_REPORTS (1990-1999).csv", 
+           colClasses = clclss)
+wls.00.09 <- 
+  read.csv("../data/STRIKE_REPORTS (2000-2009).csv", 
+           colClasses = clclss)
+wls.10.14 <- 
+  read.csv("../data/STRIKE_REPORTS (2010-Current).csv", 
+           colClasses = clclss)
+
+@
+\end{frame} 
+
+
+\begin{frame}[fragile]
+  \frametitle{Data Import}
+<<"rbind", cache = TRUE, dependson="data-read">>=
+# Base does not require the columns to be of the same class,
+# only the same name
+# dplyr requires that the columnns are of the same class.
+dim(wls.90.99)
+nrow(wls.90.99) + nrow(wls.00.09) + nrow(wls.10.14) 
+bnchmrk <- 
+  benchmark(base = rbind(wls.90.99, wls.00.09, wls.10.14), 
+            dplyr = rbind_list(wls.90.99, wls.00.09, wls.10.14),
+            replications = 100)
+bnchmrk[, c("test", "replications", "elapsed", "relative")]
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Data Import}
+<<"data-for-presentation", cache = TRUE, dependson="data-read">>=
+wls_df <- rbind(wls.90.99, wls.00.09, wls.10.14)
+class(wls_df)
+
+wls <- rbind_list(wls.90.99, wls.00.09, wls.10.14)
+class(wls)
+
+# A data frame tbl wraps a local data frame. The main
+# advantage to using a ‘tbl_df’ over a regular data frame is
+# the printing: tbl objects only print a few rows and all
+# the columns that fit on one screen, providing describing
+# the rest of it as text. [source: R help doc]
+wls_tbl_df <- tbl_df(wls)
+class(wls_tbl_df) 
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Data Printing}
+<<"data-printing">>=
+# print(wls_df)  # takes a long time, not helpful
+# head(wls_df)   # two many columns to be useful
+print(wls_tbl_df, n = 2)
+@
+\end{frame} 
+
+
+\section{magrittr}%{{{
+\begin{frame}[fragile]
+  \frametitle{{\tt magrittr}: a forward-pipe operator for {\tt R}}
+  \framesubtitle{ceci n'est pas un pipe (this is not a pipe)}
+
+  \begin{itemize}
+    \item {\tt dplyr} funcationality is made more powerful via the \verb|%>%|,
+      or equivalently, \verb|\%.%$|, operator.
+
+      %     \item<2-> Additional functionally provided by the {\tt magrittr} package
+      %       authored by Stefan Bache and Hadley Wickham.
+      % 
+      %     \item<3-> These operators are similar to 
+      %       \begin{itemize} 
+      %         \item F\#'s $|>$, or
+      %         \item Linux's $|$.
+      %       \end{itemize}
+      % 
+      %     \item<4-> Use of these operators will drastically change your {\tt R} syntax.
+      % 
+      %     \item<5-> Helpful to writting complex, nested, operations.
+      %     \item<5->``Read from left to right instead of inside out.''
+
+  \end{itemize}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
+  \framesubtitle{Examples} 
+
+<<"magrittr-examples">>=
+data(diamonds, package = "ggplot2")
+
+# find the mean price of the diamonds
+# Standard R syntax
+mean(diamonds$price)
+
+# with the pipe
+diamonds %>% 
+extract("price") %>% 
+unlist() %>% 
+mean()
+@
+
+What's the point?
+\end{frame} 
+%}}}
+
+\begin{frame}[fragile]
+  \frametitle{Reproducibility}
+  The data, code, sides, etc.\ all at \url{github.com/dewittpe/dplyr-demo}
+
+<<>>=
+print(sessionInfo(), locale = FALSE)
+@ 
+\end{frame} 
+\end{document}
+
