@@ -233,6 +233,7 @@ What's the point?
 \end{frame} 
 %}}}
 
+\section{Wrap Up}
 \begin{frame}[fragile]
   \frametitle{Reproducibility}
   The data, code, sides, etc.\ all at \url{github.com/dewittpe/dplyr-demo}
@@ -241,5 +242,18 @@ What's the point?
 print(sessionInfo(), locale = FALSE)
 @ 
 \end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{DRUG}
+  \begin{itemize}
+    \item Future MeeetUp Topics:
+      \begin{itemize}
+        \item (Possible) iPython / R speaker for later in July
+        \item We need others speakers!
+      \end{itemize}
+    \item MeetUp locations/times
+  \end{itemize}
+\end{frame} 
+
 \end{document}
 
