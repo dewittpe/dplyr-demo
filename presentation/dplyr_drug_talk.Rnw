@@ -9,14 +9,13 @@
 
 \documentclass{beamer}
 
+% preamble%{{{
 \usepackage{verbatim}
 
 \author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
 \date{1 July 2014}
 \title{Introduction to {\tt dplyr} and {\tt magrittr}}
 \subtitle{Denver R Users Group\\www.meetup.com/DenverRUG}
-
-\begin{document}
 
 <<"setup", include = FALSE>>=
 options(stringsAsFactors = FALSE)
@@ -33,12 +32,17 @@ citation("dplyr")
 opts_chunk$set(fig.align = "center",
                fig.pos   = "!htp",
                size      = "footnotesize", 
+               cache     = TRUE, 
                dev       = "pdf",
                error     = FALSE,      # stop knitr if chunk has R error
                tidy      = FALSE)
 
 @
+%}}}
 
+\begin{document}
+
+% Title page, goals%{{{
 \begin{frame}[fragile]
   \maketitle
 \end{frame} 
@@ -54,11 +58,12 @@ opts_chunk$set(fig.align = "center",
       part of {\tt dplyr} and extended further in {\tt magrittr}.  
   \end{itemize}
 
-  % \tableofcontents
+  \tableofcontents
 
 \end{frame} 
+%}}}
 
-\section{{\tt dplyr}}
+\section{{\tt dplyr}}%{{{
 \begin{frame}[fragile]
   \frametitle{{\tt dplyr}: a grammar of data manipulation}
   \begin{itemize}
@@ -86,8 +91,9 @@ opts_chunk$set(fig.align = "center",
 
   \end{itemize}
 \end{frame} 
+%}}}
 
-\subsection{Data Import}
+\subsection{Data Import}%{{{
 
 \begin{frame}[fragile]
   \frametitle{Data Import}
@@ -183,7 +189,407 @@ class(wls_tbl_df)
 print(wls_tbl_df, n = 2)
 @
 \end{frame} 
+%}}}
 
+\subsection{{\tt dplyr} verbs}%{{{
+\begin{frame}[fragile]
+  \frametitle{The verbs}
+  \begin{itemize}
+    \item ``Variable and function names should be lowercase. Use an underscore
+      (\_) to separate words within a name. Generally, variable names should be
+      nouns and function names should be verbs. Strive for names that are
+      concise and meaningful (this is not easy!).'' - Hadley Wickham,
+      \url{http://adv-r.had.co.nz/Style.html}
+
+    \item Verbs in {\tt dplyr} 
+      \begin{itemize}
+        \item {\tt select},
+        \item {\tt arrange},
+        \item {\tt filter},
+        \item {\tt mutate}, 
+        \item {\tt summarize}.
+      \end{itemize}
+  \end{itemize}
+\end{frame} 
+%}}}
+
+\subsubsection{select}%{{{
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# Select columns of a data.frame, tbl_df.
+wls_yr <- select(wls_tbl_df, INCIDENT_YEAR, AIRPORT, 
+                 ENG_1_POS, ENG_2_POS, DAM_ENG1, DAM_ENG2,
+                 HEIGHT, DISTANCE, SPEED)
+print(wls_yr, n = 5) 
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# relative speed 
+bnch <- 
+  benchmark(base  = wls_tbl_df[, c("INCIDENT_YEAR", "AIRPORT",
+                                   "ENG_1_POS", "ENG_2_POS", 
+                                   "DAM_ENG1", "DAM_ENG2", 
+                                   "HEIGHT", "DISTANCE", "SPEED")], 
+            dplyr = select(wls_tbl_df, 
+                           INCIDENT_YEAR, AIRPORT, 
+                           ENG_1_POS, ENG_2_POS, 
+                           DAM_ENG1, DAM_ENG2,
+                           HEIGHT, DISTANCE, SPEED),
+            replications = 100)
+select(bnch, test, replications, elapsed, relative)
+@
+
+Selection of columns might be slower, but, there are some
+tools to help speed up the coding, and maintenance.
+\end{frame} 
+
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# ‘num_range("x", 1:5, width = 2)’: selects all variables
+# (numerically) from x01 to x05.
+select(wls_tbl_df, num_range("DAM_ENG", 1:4))
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# ‘starts_with(x, ignore.case = FALSE)’: names starts with ‘x’
+select(wls_tbl_df, starts_with("DAM"))
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# ‘ends_with(x, ignore.case = FALSE)’: names ends in ‘x’
+select(wls_tbl_df, ends_with("4"))
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# ‘matches(x, ignore.case = FALSE)’: selects all variables
+# whose name matches the regular expression ‘x’
+select(wls_tbl_df, matches("ENG|DAM"))
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+<<>>=
+# ‘contains(x, ignore.case = FALSE)’: selects all
+# variables whose name  contains ‘x’
+select(wls_tbl_df, contains("ENG"))
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt select}}
+  What about dropping variables?
+<<>>=
+print(wls_yr, n = 2)
+print(select(wls_yr, -AIRPORT, -starts_with("ENG")), n = 3)
+@ 
+\end{frame} 
+%}}}
+
+\subsubsection{arrange}%{{{
+
+\begin{frame}[fragile]
+  \frametitle{{\tt arrange}}
+arrange: reorder the rows. Multiple inputs are ordered from left-to-right.
+<<>>=
+dat <- data.frame(var1 = c(3, 8, 2, 1), 
+                  var2 = c("E", "A", "A", "B"))
+dat
+# this would be very helpful for collecting data by a
+# subject id, visit number, ...
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt arrange}}
+<<>>=
+arrange(dat, var2)
+arrange(dat, var2, var1)
+# this would be very helpful for collecting data by a
+# subject id, visit number, ...
+@
+\end{frame} 
+%}}}
+
+\subsubsection{filter}%{{{
+\begin{frame}[fragile]
+  \frametitle{{\tt filter}}
+filter: return only a subset of the rows. If multiple
+conditions are supplied they are combined with ‘\&’.
+<<>>=
+dim(wls_yr)
+filter(wls_yr, INCIDENT_YEAR > 2000, INCIDENT_YEAR <= 2005)
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt filter}}
+<<>>=
+bnch <- 
+  benchmark(base = subset(wls_yr, INCIDENT_YEAR > 2000 & INCIDENT_YEAR <= 2005),
+            dplyr = filter(wls_yr, INCIDENT_YEAR > 2000, INCIDENT_YEAR <= 2005),
+            replications = 100)
+select(bnch, test, replications, elapsed, relative)
+@
+\end{frame} 
+%}}}
+
+\subsubsection{mutate}%{{{
+\begin{frame}[fragile]
+  \frametitle{{\tt mutate}}
+mutate: add new columns. Multiple inputs create multiple columns.
+<<>>=
+eng.lbls <- c("mounted below the wing", "mounted above the wing",
+              "part of the wing root", "nacelle-mounted on the wing", 
+              "mounted on the aft fuselage")
+str(mutate(wls_yr, 
+       SPEED_MPH = SPEED * 1.15078, # SPEED was in knots
+       ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls),
+       ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)))
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt mutate}}
+<<>>=
+bnch <- 
+benchmark(base = within(wls_yr, {
+                        SPEED_MPH = SPEED * 1.15078
+                        ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls)
+                        ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)}),
+          dplyr = mutate(wls_yr, 
+                         SPEED_MPH = SPEED * 1.15078, 
+                         ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls),
+                         ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)),
+          replications = 100)
+select(bnch, test, replications, elapsed, relative)
+@
+\end{frame} 
+%}}}
+
+\subsubsection{summarize}%{{{
+\begin{frame}[fragile]
+  \frametitle{{\tt summarize}}
+summarise: reduce each group to a single row. Multiple
+inputs create multiple output summaries.  (Two spellings:
+{\tt summarize} and {\tt summarise}.)
+<<>>=
+summarise(wls_yr, 
+          "Mean speed" = mean(SPEED, na.rm = TRUE),
+          "SD speed"   = sd(SPEED, na.rm = TRUE), 
+          n            = sum(!is.na(SPEED)))
+@
+\end{frame} 
+%}}}
+
+\subsubsection{group\_by}%{{{
+\begin{frame}[fragile]
+  \frametitle{{\tt group\_by}}
+<<>>=
+summarise(group_by(wls_yr, ENG_1_POS), 
+          "Mean speed" = mean(SPEED, na.rm = TRUE),
+          "SD speed"   = sd(SPEED, na.rm = TRUE), 
+          n            = sum(!is.na(SPEED)))
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt group\_by}}
+<<>>=
+bnch <- 
+  benchmark(base = aggregate(SPEED ~ ENG_1_POS, wls_yr, 
+                             function(x) c(mean = mean(x, na.rm = TRUE),
+                                           sd   = sd(x, na.rm = T),
+                                           n    = sum(!is.na(x)))),
+            dplyr = summarise(group_by(wls_yr, ENG_1_POS), 
+                              "Mean speed" = mean(SPEED, na.rm = TRUE),
+                              "SD speed"   = sd(SPEED, na.rm = TRUE), 
+                              n            = sum(!is.na(SPEED))),
+            replications = 100)
+select(bnch, test, replications, elapsed, relative) 
+@
+\end{frame} 
+%}}}
+
+\subsection{Chaining Work together}%{{{
+\begin{frame}[fragile]
+  \frametitle{Say we need to filter, group\_by, and
+  summarise data}
+<<tidy = TRUE>>=
+# What is the mean distance from the airport, in kilometers,
+# where the strike took place, by damage to engine, on
+# twin engine aircraft, between 2002 and 2010, inclusive?
+summarize(group_by(mutate(filter(wls, 
+                                 INCIDENT_YEAR >= 2002, 
+                                 INCIDENT_YEAR <= 2010, 
+                                 NUM_ENGS == 2),
+                          DISTANCE_KM = DISTANCE * 1.60934), 
+                   DAM_ENG1, DAM_ENG2), 
+          "mean distance in KM" = mean(DISTANCE_KM, na.rm = TRUE))
+# Without a comment to explain, how long would it take to
+# explain the above code?  You need to read from the inside
+# out.  THERE IS A BETTER WAY
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Chain together multiple operations.}
+<<>>=
+wls %>% 
+filter(INCIDENT_YEAR >= 2002, 
+       INCIDENT_YEAR <= 2010, 
+       NUM_ENGS      == 2) %>%
+mutate(DISTANCE_KM = DISTANCE * 1.60934) %>%
+group_by(DAM_ENG1, DAM_ENG2) %>%
+summarise("mean distance in KM" = mean(DISTANCE_KM, na.rm = TRUE))
+@
+More detailed examples of the forward-piping operator
+follow.
+\end{frame} 
+%}}}
+
+\subsection{Joins}%{{{
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \begin{itemize}
+    \item {\tt dplyr} version 0.2 has the following joins:
+      \begin{itemize}
+        \item {\tt inner\_join}, 
+        \item {\tt left\_join}, 
+        \item {\tt semi\_join}, and
+        \item {\tt anti\_join}.
+      \end{itemize}
+    \item Stated milestone for version 0.3 includes
+      \begin{itemize}
+        \item {\tt outer\_join}, 
+        \item {\tt right\_join}, and
+        \item {\tt cross\_join}.
+      \end{itemize}
+      %      ‘inner_join’ return all rows from x where there are matching values in y,
+      %           and all columns from x and y. If there are multiple matches between
+      %           x and y, all combination of the matches are returned.
+      % 
+      %      ‘left_join’ return all rows from x, and all columns from x and y. If
+      %           there are multiple matches between x and y, all combination of the
+      %           matches are returned.
+      % 
+      %      ‘semi_join’ return all rows from x where there are matching values in y,
+      %           keeping just columns from x.
+      % 
+      %           A semi join differs from an inner join because an inner join will
+      %           return one row of ‘x’ for each matching row of ‘y’, where a semi
+      %           join will never duplicate rows of ‘x’.
+      % 
+      %      ‘anti_join’ return all rows from x where there are not matching values in
+      %           y, keeping just columns from x
+  \end{itemize}
+\end{frame} 
+%}}}
+
+\subsection{Memory Usage}%{{{
+\begin{frame}[fragile]
+  \frametitle{Improved memory usage} 
+<<>>=
+this_df2 <- this_df <- data.frame(var1 = 1:5, var2 = rnorm(5))
+changes(this_df, this_df2)
+this_df$var1 <- rexp(5, rate = 2)
+changes(this_df, this_df2)
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Improved memory usage}
+<<>>=
+this_df2 <- this_df <- data.frame(var1 = 1:5, var2 = rnorm(5)) %>% tbl_df()
+changes(this_df, this_df2) 
+this_df <- this_df %>% mutate(var1 = rexp(5))
+changes(this_df, this_df2)
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt dplyr} memory usage}
+  From the {\tt vignette("memory", "dplyr")}
+  \begin{itemize}
+    \item {\tt tbl\_df()} and {\tt group\_by()} don't copy columns
+    \item {\tt select()} never copies columns, even when you rename them
+    \item {\tt mutate()} never copies columns, except when you modify an existing column
+    \item {\tt arrange()} must copy because you're changing
+      the order of every column. This is an expensive
+      operation for big data, but you can generally avoid it
+      using the order argument to window functions
+    \item {\tt summarise()} creates new data, but it's
+      usually at least an order of magnitude smaller than
+      the original data.
+  \end{itemize}
+\end{frame} 
+%}}}
+
+\subsection{Window Functions}%{{{
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+<<>>=
+# see vignette("window-functions", package = "dplyr")
+@
+\end{frame} 
+%}}}
+
+\subsection{Other data sources}%{{{
+\begin{frame}[fragile]
+  \frametitle{Other Data Sources}
+  \begin{itemize}
+    \item {\tt dplyr} works for 
+      \begin{itemize}
+        \item {\tt data.frame}s, \item {\tt data.table}s,
+          databases, and multidimensional arrays.
+        \item Same verbs used for all data sources.
+        \item See {\tt vignette("databases", package =
+          "dplyr")} for more details.
+
+      \end{itemize}
+  \end{itemize}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt data.table} vs {\tt dplyr}}
+  From the {\\ dplyr} introduction vignette:
+  \begin{itemize}
+    \item For multiple operations, data.table can be faster
+      because you usually use it with multiple verbs at the
+      same time. For example, with data table you can do a
+      mutate and a select in a single step, and it's smart
+      enough to know that there's no point in computing the
+      new variable for the rows you're about to throw away.
+    \item The advantages of using {\tt dplyr} with data
+      tables are:
+      \begin{itemize}
+        \item For common data manipulation tasks, it
+          insulates you from reference semantics of
+          data.tables, and protects you from accidentally
+          modifying your data.
+        \item Instead of one complex method built on the
+          subscripting operator ([), it provides many simple
+          methods.
+      \end{itemize} 
+  \end{itemize}
+\end{frame} 
+%}}}
 
 \section{magrittr}%{{{
 \begin{frame}[fragile]
@@ -191,22 +597,22 @@ print(wls_tbl_df, n = 2)
   \framesubtitle{ceci n'est pas un pipe (this is not a pipe)}
 
   \begin{itemize}
-    \item {\tt dplyr} funcationality is made more powerful via the \verb|%>%|,
+    \item {\tt dplyr} functionality is made more powerful via the \verb|%>%|,
       or equivalently, \verb|\%.%$|, operator.
 
-      %     \item<2-> Additional functionally provided by the {\tt magrittr} package
-      %       authored by Stefan Bache and Hadley Wickham.
-      % 
-      %     \item<3-> These operators are similar to 
-      %       \begin{itemize} 
-      %         \item F\#'s $|>$, or
-      %         \item Linux's $|$.
-      %       \end{itemize}
-      % 
-      %     \item<4-> Use of these operators will drastically change your {\tt R} syntax.
-      % 
-      %     \item<5-> Helpful to writting complex, nested, operations.
-      %     \item<5->``Read from left to right instead of inside out.''
+    \item Additional functionally provided by the {\tt magrittr} package
+      authored by Stefan Bache and Hadley Wickham.
+
+    \item These operators are similar to 
+      \begin{itemize} 
+        \item F\#'s $|>$, or
+        \item Linux's $|$.
+      \end{itemize}
+
+    \item Use of these operators will drastically change your {\tt R} syntax.
+
+    \item Helpful to writing complex, nested, operations.
+    \item``Read from left to right instead of inside out.''
 
   \end{itemize}
 \end{frame} 
@@ -233,7 +639,7 @@ What's the point?
 \end{frame} 
 %}}}
 
-\section{Wrap Up}
+\section{Wrap Up}%{{{
 \begin{frame}[fragile]
   \frametitle{Reproducibility}
   The data, code, sides, etc.\ all at \url{github.com/dewittpe/dplyr-demo}
@@ -254,6 +660,7 @@ print(sessionInfo(), locale = FALSE)
     \item MeetUp locations/times
   \end{itemize}
 \end{frame} 
+%}}}
 
 \end{document}
 
