@@ -10,6 +10,8 @@
 \documentclass{beamer}
 
 % preamble%{{{
+\setbeamersize{text margin left=5pt,text margin right=5pt}
+
 \usepackage{verbatim}
 
 \author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
@@ -186,7 +188,7 @@ class(wls_tbl_df)
 <<"data-printing">>=
 # print(wls_df)  # takes a long time, not helpful
 # head(wls_df)   # two many columns to be useful
-print(wls_tbl_df, n = 2)
+print(wls_tbl_df, n = 3)
 @
 \end{frame} 
 %}}}
@@ -229,7 +231,7 @@ print(wls_yr, n = 5)
 \begin{frame}[fragile]
   \frametitle{{\tt select}}
 <<>>=
-# relative speed 
+# relative speed betwwen dplyr and base R
 bnch <- 
   benchmark(base  = wls_tbl_df[, c("INCIDENT_YEAR", "AIRPORT",
                                    "ENG_1_POS", "ENG_2_POS", 
@@ -244,7 +246,7 @@ bnch <-
 select(bnch, test, replications, elapsed, relative)
 @
 
-Selection of columns might be slower, but, there are some
+Selection of columns might be slower in dplyr, but, there are some
 tools to help speed up the coding, and maintenance.
 \end{frame} 
 
@@ -311,8 +313,6 @@ arrange: reorder the rows. Multiple inputs are ordered from left-to-right.
 dat <- data.frame(var1 = c(3, 8, 2, 1), 
                   var2 = c("E", "A", "A", "B"))
 dat
-# this would be very helpful for collecting data by a
-# subject id, visit number, ...
 @
 \end{frame} 
 
@@ -340,10 +340,14 @@ filter(wls_yr, INCIDENT_YEAR > 2000, INCIDENT_YEAR <= 2005)
 
 \begin{frame}[fragile]
   \frametitle{{\tt filter}}
+
 <<>>=
+# How does dplyr::filter compare to base::subset?
 bnch <- 
-  benchmark(base = subset(wls_yr, INCIDENT_YEAR > 2000 & INCIDENT_YEAR <= 2005),
-            dplyr = filter(wls_yr, INCIDENT_YEAR > 2000, INCIDENT_YEAR <= 2005),
+  benchmark(base = subset(wls_yr, 
+                          INCIDENT_YEAR > 2000 & INCIDENT_YEAR <= 2005),
+            dplyr = filter(wls_yr, 
+                           INCIDENT_YEAR > 2000, INCIDENT_YEAR <= 2005),
             replications = 100)
 select(bnch, test, replications, elapsed, relative)
 @
@@ -368,6 +372,7 @@ str(mutate(wls_yr,
 \begin{frame}[fragile]
   \frametitle{{\tt mutate}}
 <<>>=
+# dplyr::mutate is conceptually similar to base::within
 bnch <- 
 benchmark(base = within(wls_yr, {
                         SPEED_MPH = SPEED * 1.15078
@@ -393,7 +398,9 @@ inputs create multiple output summaries.  (Two spellings:
 summarise(wls_yr, 
           "Mean speed" = mean(SPEED, na.rm = TRUE),
           "SD speed"   = sd(SPEED, na.rm = TRUE), 
-          n            = sum(!is.na(SPEED)))
+          n            = sum(!is.na(SPEED)),
+          records      = n(),
+          airports     = n_distinct(AIRPORT))
 @
 \end{frame} 
 %}}}
@@ -405,7 +412,11 @@ summarise(wls_yr,
 summarise(group_by(wls_yr, ENG_1_POS), 
           "Mean speed" = mean(SPEED, na.rm = TRUE),
           "SD speed"   = sd(SPEED, na.rm = TRUE), 
-          n            = sum(!is.na(SPEED)))
+          "Mean speed" = mean(SPEED, na.rm = TRUE),
+          "SD speed"   = sd(SPEED, na.rm = TRUE), 
+          n            = sum(!is.na(SPEED)),
+          records      = n(),
+          airports     = n_distinct(AIRPORT))
 @
 \end{frame} 
 
@@ -424,6 +435,7 @@ bnch <-
             replications = 100)
 select(bnch, test, replications, elapsed, relative) 
 @
+  {\tt dplyr::summarise} is much faster than {\tt stats::aggregate}.
 \end{frame} 
 %}}}
 
@@ -495,6 +507,13 @@ person_df   <- data("Master",   package = "Lahman")
 batting_df  <- Batting  %>% tbl_df()
 pitching_df <- Pitching %>% tbl_df()
 person_df   <- Master   %>% tbl_df()
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
+<<>>=
 print(batting_df,  n = 3)
 print(pitching_df, n = 3)
 print(person_df,   n = 3) 
@@ -510,11 +529,6 @@ print(person_df,   n = 3)
 
 <<>>=
 # build a data.frame for the pitching stats of players born in Colorado
-person_df %>% 
-filter(birthState == "CO") %>% 
-select(playerID) %>% 
-summarise(n_distinct(playerID))        # n_distinct is a fast length(unique())
-
 base_inner <- merge(subset(person_df, birthState == "CO"), 
                     pitching_df, 
                     by = "playerID", 
@@ -525,9 +539,8 @@ dplyr_inner <- person_df %>%
                filter(birthState == "CO") %>% 
                inner_join(x = ., pitching_df, by = "playerID") 
 
-dplyr_inner %>% summarise(n_distinct(playerID))
-
 all.equal(base_inner, dplyr_inner)
+dim(dplyr_inner)
 @
 \end{frame}
 
@@ -541,7 +554,8 @@ bnch <-
                          pitching_df, 
                          by = "playerID", 
                          all = FALSE),
-            dplyr = person_df %>% filter(birthState == "CO") %>% 
+            dplyr = person_df %>% 
+                    filter(birthState == "CO") %>% 
                     inner_join(x = ., pitching_df, by = "playerID"), 
             replications = 100)
 bnch %>% select(test, replications, elapsed, relative) 
@@ -566,9 +580,8 @@ dplyr_left <- person_df %>%
               filter(birthState == "CO") %>% 
               left_join(x = ., pitching_df, by = "playerID") 
 
-dplyr_left %>% summarise(n_distinct(playerID))
-
 all.equal(base_left, dplyr_left) 
+dim(dplyr_left)
 @ 
 \end{frame} 
 
@@ -581,7 +594,8 @@ bnch <-
                          pitching_df, 
                          by = "playerID", 
                          all.x = TRUE),
-            dplyr = person_df %>% filter(birthState == "CO") %>% 
+            dplyr = person_df %>% 
+                    filter(birthState == "CO") %>% 
                     left_join(x = ., pitching_df, by = "playerID"), 
             replications = 100)
 bnch %>% select(test, replications, elapsed, relative) 
@@ -599,14 +613,14 @@ bnch %>% select(test, replications, elapsed, relative)
   join will never duplicate rows of ‘x’.
 
 <<>>=
-dplyr_semi <- semi_join(person_df %>% filter(birthState == "CO"), 
-                        pitching_df, 
+dplyr_semi <- person_df %>% filter(birthState == "CO") %>% 
+              semi_join(pitching_df, 
                         by = "playerID")
 dplyr_inner %>% dim()
 dplyr_semi %>% dim()
 
-# the semi join returns a subset of the person_df data.frame which has at least
-# one match in the pitching_df.
+# the semi join returns a subset of the person_df data.frame 
+# which has at least one match in the pitching_df.
 @
 
 \end{frame} 
@@ -622,10 +636,9 @@ dplyr_left %>% summarise(n_distinct(playerID))
 dplyr_semi %>% summarise(n_distinct(playerID))
 # there are 83 - 54 = 29 players who have no pitching stats... who are they?
 
-dplyr_anti <- anti_join(person_df %>% filter(birthState == "CO"), 
-                        pitching_df, 
-                        by = "playerID")
-dplyr_anti %>% dim() 
+dplyr_anti <- person_df %>% filter(birthState == "CO") %>%
+              anti_join(pitching_df, by = "playerID")
+dplyr_anti
 @
 \end{frame} 
 
@@ -634,7 +647,7 @@ dplyr_anti %>% dim()
   \framesubtitle{{\tt outer\_join}}
   Return all rows from x and y, keeping all columns of x and y.
 
-  Not implimented in {\tt dplyr\_0.2}, will be implimented in {\tt dplyr\_0.3}.
+  Not implemented in {\tt dplyr\_0.2}, will be implemented in {\tt dplyr\_0.3}.
 
 <<>>=
 base_outer <- merge(batting_df, pitching_df, 
@@ -644,18 +657,15 @@ base_outer <- merge(batting_df, pitching_df,
 
 # workaround for dplyr_0.2, outer_join should be part of dplyr_0.3
 my_outer_join <- function(dfx, dfy, suffixes = c(".x", ".y"), ...) { 
-
-  # d1 <- left_join(batting_df, pitching_df, by = "playerID")
-  # d2 <- left_join(pitching_df, batting_df, by = "playerID")
   d1 <- left_join(dfx, dfy, ...)
   d2 <- left_join(dfy, dfx, ...)
 
   names(d1) <- names(d1) %>% 
-  gsub("\\.x", suffixes[1], x = .)  %>%
-  gsub("\\.y", suffixes[2], x = .)
+               gsub("\\.x", suffixes[1], x = .)  %>%
+               gsub("\\.y", suffixes[2], x = .)
   names(d2) <- names(d2) %>% 
-  gsub("\\.y", suffixes[1], x = .)  %>%
-  gsub("\\.x", suffixes[2], x = .)
+               gsub("\\.y", suffixes[1], x = .)  %>%
+               gsub("\\.x", suffixes[2], x = .)
 
   out <- dplyr::union(d1, d2)
   return(out)
@@ -745,7 +755,6 @@ bnch %>% select(test, replications, elapsed, relative)
   {\tt dplyr} is fast, fast enough to overcome the additional scripting.
 \end{frame} 
 %}}}
-
 
 \subsection{Memory Usage}%{{{
 \begin{frame}[fragile]

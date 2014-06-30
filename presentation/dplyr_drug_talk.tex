@@ -59,6 +59,8 @@
 \usepackage{alltt}
 
 % preamble%{{{
+\setbeamersize{text margin left=5pt,text margin right=5pt}
+
 \usepackage{verbatim}
 
 \author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
@@ -186,8 +188,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   88.90    3.872
-## 2 dplyr          100   22.96    1.000
+## 1  base          100  110.74    4.762
+## 2 dplyr          100   23.25    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -234,37 +236,45 @@
 \begin{alltt}
 \hlcom{# print(wls_df)  # takes a long time, not helpful}
 \hlcom{# head(wls_df)   # two many columns to be useful}
+
+\hlcom{# print.tbl_df looks bad on this slide but much better in console}
+\hlcom{# other examples will be better, I promise.}
 \hlkwd{print}\hlstd{(wls_tbl_df,} \hlkwc{n} \hlstd{=} \hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [142,911 x 94]
 ## 
-##    INDEX_NR OPID          OPERATOR     ATYPE AMA AMO EMA EMO AC_CLASS
-## 1    100000  AAL AMERICAN AIRLINES     B-727 148  10  34  10        A
-## 2    100001  UAL   UNITED AIRLINES B-737-300 148  24  10  01        A
-## ..      ...  ...               ...       ... ... ... ... ...      ...
-## Variables not shown: AC_MASS (int), NUM_ENGS (chr), TYPE_ENG (chr),
-##   ENG_1_POS (chr), ENG_2_POS (int), ENG_3_POS (chr), ENG_4_POS (int), REG
-##   (chr), FLT (chr), REMAINS_COLLECTED (lgl), REMAINS_SENT (lgl),
-##   INCIDENT_DATE (chr), INCIDENT_MONTH (int), INCIDENT_YEAR (int),
-##   TIME_OF_DAY (chr), TIME (int), AIRPORT_ID (chr), AIRPORT (chr), STATE
-##   (chr), FAAREGION (chr), ENROUTE (chr), RUNWAY (chr), LOCATION (chr),
-##   HEIGHT (int), SPEED (int), DISTANCE (dbl), PHASE_OF_FLT (chr), DAMAGE
-##   (chr), STR_RAD (lgl), DAM_RAD (lgl), STR_WINDSHLD (lgl), DAM_WINDSHLD
-##   (lgl), STR_NOSE (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl), DAM_ENG1 (lgl),
-##   STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl), DAM_ENG3 (lgl), STR_ENG4
-##   (lgl), DAM_ENG4 (lgl), INGESTED (lgl), STR_PROP (lgl), DAM_PROP (lgl),
-##   STR_WING_ROT (lgl), DAM_WING_ROT (lgl), STR_FUSE (lgl), DAM_FUSE (lgl),
-##   STR_LG (lgl), DAM_LG (lgl), STR_TAIL (lgl), DAM_TAIL (lgl), STR_LGHTS
-##   (lgl), DAM_LGHTS (lgl), STR_OTHER (lgl), DAM_OTHER (lgl), OTHER_SPECIFY
-##   (chr), EFFECT (chr), EFFECT_OTHER (chr), SKY (chr), PRECIP (chr),
-##   SPECIES_ID (chr), SPECIES (chr), BIRDS_SEEN (chr), BIRDS_STRUCK (chr),
-##   SIZE (chr), WARNED (chr), COMMENTS (chr), REMARKS (chr), AOS (int),
-##   COST_REPAIRS (int), COST_OTHER (int), COST_REPAIRS_INFL_ADJ (int),
-##   COST_OTHER_INFL_ADJ (int), REPORTED_NAME (chr), REPORTED_TITLE (chr),
-##   REPORTED_DATE (chr), SOURCE (chr), PERSON (chr), NR_INJURIES (int),
-##   NR_FATALITIES (int), LUPDATE (chr), TRANSFER (lgl), INDICATED_DAMAGE
-##   (lgl)
+##    INDEX_NR OPID          OPERATOR     ATYPE AMA AMO EMA EMO
+## 1    100000  AAL AMERICAN AIRLINES     B-727 148  10  34  10
+## 2    100001  UAL   UNITED AIRLINES B-737-300 148  24  10  01
+## ..      ...  ...               ...       ... ... ... ... ...
+## Variables not shown: AC_CLASS (chr), AC_MASS (int), NUM_ENGS
+##   (chr), TYPE_ENG (chr), ENG_1_POS (chr), ENG_2_POS (int),
+##   ENG_3_POS (chr), ENG_4_POS (int), REG (chr), FLT (chr),
+##   REMAINS_COLLECTED (lgl), REMAINS_SENT (lgl), INCIDENT_DATE
+##   (chr), INCIDENT_MONTH (int), INCIDENT_YEAR (int),
+##   TIME_OF_DAY (chr), TIME (int), AIRPORT_ID (chr), AIRPORT
+##   (chr), STATE (chr), FAAREGION (chr), ENROUTE (chr), RUNWAY
+##   (chr), LOCATION (chr), HEIGHT (int), SPEED (int), DISTANCE
+##   (dbl), PHASE_OF_FLT (chr), DAMAGE (chr), STR_RAD (lgl),
+##   DAM_RAD (lgl), STR_WINDSHLD (lgl), DAM_WINDSHLD (lgl),
+##   STR_NOSE (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl), DAM_ENG1
+##   (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl),
+##   DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl), INGESTED
+##   (lgl), STR_PROP (lgl), DAM_PROP (lgl), STR_WING_ROT (lgl),
+##   DAM_WING_ROT (lgl), STR_FUSE (lgl), DAM_FUSE (lgl), STR_LG
+##   (lgl), DAM_LG (lgl), STR_TAIL (lgl), DAM_TAIL (lgl),
+##   STR_LGHTS (lgl), DAM_LGHTS (lgl), STR_OTHER (lgl),
+##   DAM_OTHER (lgl), OTHER_SPECIFY (chr), EFFECT (chr),
+##   EFFECT_OTHER (chr), SKY (chr), PRECIP (chr), SPECIES_ID
+##   (chr), SPECIES (chr), BIRDS_SEEN (chr), BIRDS_STRUCK (chr),
+##   SIZE (chr), WARNED (chr), COMMENTS (chr), REMARKS (chr),
+##   AOS (int), COST_REPAIRS (int), COST_OTHER (int),
+##   COST_REPAIRS_INFL_ADJ (int), COST_OTHER_INFL_ADJ (int),
+##   REPORTED_NAME (chr), REPORTED_TITLE (chr), REPORTED_DATE
+##   (chr), SOURCE (chr), PERSON (chr), NR_INJURIES (int),
+##   NR_FATALITIES (int), LUPDATE (chr), TRANSFER (lgl),
+##   INDICATED_DAMAGE (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -309,15 +319,15 @@
 \begin{verbatim}
 ## Source: local data frame [142,911 x 9]
 ## 
-##    INCIDENT_YEAR                     AIRPORT ENG_1_POS ENG_2_POS DAM_ENG1
-## 1           1992 DALLAS/FORT WORTH INTL ARPT         5         6    FALSE
-## 2           1996             SACRAMENTO INTL         1         1    FALSE
-## 3           1996         DENVER INTL AIRPORT         1         1    FALSE
-## 4           1996             EPPLEY AIRFIELD         1         1    FALSE
-## 5           1996 WASHINGTON DULLES INTL ARPT         1         1    FALSE
-## ..           ...                         ...       ...       ...      ...
-## Variables not shown: DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED
-##   (int)
+##    INCIDENT_YEAR                     AIRPORT ENG_1_POS
+## 1           1992 DALLAS/FORT WORTH INTL ARPT         5
+## 2           1996             SACRAMENTO INTL         1
+## 3           1996         DENVER INTL AIRPORT         1
+## 4           1996             EPPLEY AIRFIELD         1
+## 5           1996 WASHINGTON DULLES INTL ARPT         1
+## ..           ...                         ...       ...
+## Variables not shown: ENG_2_POS (int), DAM_ENG1 (lgl),
+##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -344,8 +354,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   0.008    1.000
-## 2 dplyr          100   0.033    4.125
+## 1  base          100   0.006      1.0
+## 2 dplyr          100   0.027      4.5
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -395,21 +405,21 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 15]
 ## 
-##    DAMAGE DAM_RAD DAM_WINDSHLD DAM_NOSE DAM_ENG1 DAM_ENG2 DAM_ENG3
-## 1       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 2           FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 3           FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 4       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 5       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 6       M   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 7       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 8      M?   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 9       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## 10          FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
-## ..    ...     ...          ...      ...      ...      ...      ...
-## Variables not shown: DAM_ENG4 (lgl), DAM_PROP (lgl), DAM_WING_ROT (lgl),
-##   DAM_FUSE (lgl), DAM_LG (lgl), DAM_TAIL (lgl), DAM_LGHTS (lgl), DAM_OTHER
-##   (lgl)
+##    DAMAGE DAM_RAD DAM_WINDSHLD DAM_NOSE DAM_ENG1 DAM_ENG2
+## 1       N   FALSE        FALSE    FALSE    FALSE    FALSE
+## 2           FALSE        FALSE    FALSE    FALSE    FALSE
+## 3           FALSE        FALSE    FALSE    FALSE    FALSE
+## 4       N   FALSE        FALSE    FALSE    FALSE    FALSE
+## 5       N   FALSE        FALSE    FALSE    FALSE    FALSE
+## 6       M   FALSE        FALSE    FALSE    FALSE    FALSE
+## 7       N   FALSE        FALSE    FALSE    FALSE    FALSE
+## 8      M?   FALSE        FALSE    FALSE    FALSE    FALSE
+## 9       N   FALSE        FALSE    FALSE    FALSE    FALSE
+## 10          FALSE        FALSE    FALSE    FALSE    FALSE
+## ..    ...     ...          ...      ...      ...      ...
+## Variables not shown: DAM_ENG3 (lgl), DAM_ENG4 (lgl), DAM_PROP
+##   (lgl), DAM_WING_ROT (lgl), DAM_FUSE (lgl), DAM_LG (lgl),
+##   DAM_TAIL (lgl), DAM_LGHTS (lgl), DAM_OTHER (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -455,23 +465,25 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 26]
 ## 
-##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS DAMAGE
-## 1         3        D         5         6         5        NA      N
-## 2         2        D         1         1                  NA       
-## 3         2        D         1         1                  NA       
-## 4         2        D         1         1                  NA      N
-## 5         2        D         1         1                  NA      N
-## 6         2        D         1         1                  NA      M
-## 7         3        D         5         6         5        NA      N
-## 8         2        C         4         4                  NA     M?
-## 9         2        D         1         1                  NA      N
-## 10        2        D         5         5                  NA       
-## ..      ...      ...       ...       ...       ...       ...    ...
-## Variables not shown: DAM_RAD (lgl), DAM_WINDSHLD (lgl), DAM_NOSE (lgl),
-##   STR_ENG1 (lgl), DAM_ENG1 (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3
-##   (lgl), DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl), DAM_PROP (lgl),
-##   DAM_WING_ROT (lgl), DAM_FUSE (lgl), DAM_LG (lgl), DAM_TAIL (lgl),
-##   DAM_LGHTS (lgl), DAM_OTHER (lgl), INDICATED_DAMAGE (lgl)
+##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS
+## 1         3        D         5         6         5        NA
+## 2         2        D         1         1                  NA
+## 3         2        D         1         1                  NA
+## 4         2        D         1         1                  NA
+## 5         2        D         1         1                  NA
+## 6         2        D         1         1                  NA
+## 7         3        D         5         6         5        NA
+## 8         2        C         4         4                  NA
+## 9         2        D         1         1                  NA
+## 10        2        D         5         5                  NA
+## ..      ...      ...       ...       ...       ...       ...
+## Variables not shown: DAMAGE (chr), DAM_RAD (lgl),
+##   DAM_WINDSHLD (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl),
+##   DAM_ENG1 (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3
+##   (lgl), DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl),
+##   DAM_PROP (lgl), DAM_WING_ROT (lgl), DAM_FUSE (lgl), DAM_LG
+##   (lgl), DAM_TAIL (lgl), DAM_LGHTS (lgl), DAM_OTHER (lgl),
+##   INDICATED_DAMAGE (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -489,20 +501,21 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 14]
 ## 
-##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS STR_ENG1
-## 1         3        D         5         6         5        NA    FALSE
-## 2         2        D         1         1                  NA    FALSE
-## 3         2        D         1         1                  NA     TRUE
-## 4         2        D         1         1                  NA    FALSE
-## 5         2        D         1         1                  NA    FALSE
-## 6         2        D         1         1                  NA     TRUE
-## 7         3        D         5         6         5        NA    FALSE
-## 8         2        C         4         4                  NA    FALSE
-## 9         2        D         1         1                  NA    FALSE
-## 10        2        D         5         5                  NA    FALSE
-## ..      ...      ...       ...       ...       ...       ...      ...
-## Variables not shown: DAM_ENG1 (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl),
-##   STR_ENG3 (lgl), DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl)
+##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS
+## 1         3        D         5         6         5        NA
+## 2         2        D         1         1                  NA
+## 3         2        D         1         1                  NA
+## 4         2        D         1         1                  NA
+## 5         2        D         1         1                  NA
+## 6         2        D         1         1                  NA
+## 7         3        D         5         6         5        NA
+## 8         2        C         4         4                  NA
+## 9         2        D         1         1                  NA
+## 10        2        D         5         5                  NA
+## ..      ...      ...       ...       ...       ...       ...
+## Variables not shown: STR_ENG1 (lgl), DAM_ENG1 (lgl), STR_ENG2
+##   (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl), DAM_ENG3 (lgl),
+##   STR_ENG4 (lgl), DAM_ENG4 (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -519,12 +532,12 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 9]
 ## 
-##    INCIDENT_YEAR                     AIRPORT ENG_1_POS ENG_2_POS DAM_ENG1
-## 1           1992 DALLAS/FORT WORTH INTL ARPT         5         6    FALSE
-## 2           1996             SACRAMENTO INTL         1         1    FALSE
-## ..           ...                         ...       ...       ...      ...
-## Variables not shown: DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED
-##   (int)
+##    INCIDENT_YEAR                     AIRPORT ENG_1_POS
+## 1           1992 DALLAS/FORT WORTH INTL ARPT         5
+## 2           1996             SACRAMENTO INTL         1
+## ..           ...                         ...       ...
+## Variables not shown: ENG_2_POS (int), DAM_ENG1 (lgl),
+##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
 \end{verbatim}
 \begin{alltt}
 \hlkwd{print}\hlstd{(}\hlkwd{select}\hlstd{(wls_yr,} \hlopt{-}\hlstd{AIRPORT,} \hlopt{-}\hlkwd{starts_with}\hlstd{(}\hlstr{"ENG"}\hlstd{)),} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
@@ -622,20 +635,20 @@ conditions are supplied they are combined with ‘\&’.
 \begin{verbatim}
 ## Source: local data frame [31,947 x 9]
 ## 
-##    INCIDENT_YEAR                       AIRPORT ENG_1_POS ENG_2_POS
-## 1           2001           JOHN F KENNEDY INTL                  NA
-## 2           2001       SAN FRANCISCO INTL ARPT         1         1
-## 3           2001                  ORLANDO INTL         1         1
-## 4           2001                  MOLOKAI ARPT         4         4
-## 5           2001         LAMBERT-ST LOUIS INTL         5         5
-## 6           2001              KANSAS CITY INTL         1         1
-## 7           2001                       UNKNOWN         1         1
-## 8           2001         AKRON-CANTON REGIONAL         7        NA
-## 9           2001 DESTIN-FORT WALTON BEACH ARPT         5         5
-## 10          2001           JOHN F KENNEDY INTL         1         1
-## ..           ...                           ...       ...       ...
-## Variables not shown: DAM_ENG1 (lgl), DAM_ENG2 (lgl), HEIGHT (int),
-##   DISTANCE (dbl), SPEED (int)
+##    INCIDENT_YEAR                       AIRPORT ENG_1_POS
+## 1           2001           JOHN F KENNEDY INTL          
+## 2           2001       SAN FRANCISCO INTL ARPT         1
+## 3           2001                  ORLANDO INTL         1
+## 4           2001                  MOLOKAI ARPT         4
+## 5           2001         LAMBERT-ST LOUIS INTL         5
+## 6           2001              KANSAS CITY INTL         1
+## 7           2001                       UNKNOWN         1
+## 8           2001         AKRON-CANTON REGIONAL         7
+## 9           2001 DESTIN-FORT WALTON BEACH ARPT         5
+## 10          2001           JOHN F KENNEDY INTL         1
+## ..           ...                           ...       ...
+## Variables not shown: ENG_2_POS (int), DAM_ENG1 (lgl),
+##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -654,8 +667,8 @@ conditions are supplied they are combined with ‘\&’.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   8.015    5.475
-## 2 dplyr          100   1.464    1.000
+## 1  base          100   7.968     5.38
+## 2 dplyr          100   1.481     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -713,8 +726,8 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   5.445    1.007
-## 2 dplyr          100   5.406    1.000
+## 1  base          100   5.830    1.019
+## 2 dplyr          100   5.722    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -796,8 +809,8 @@ inputs create multiple output summaries.  (Two spellings:
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100  79.864    53.56
-## 2 dplyr          100   1.491     1.00
+## 1  base          100  83.044    53.72
+## 2 dplyr          100   1.546     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -811,12 +824,12 @@ inputs create multiple output summaries.  (Two spellings:
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# What is the mean distance from the airport, in kilometers, where the}
-\hlcom{# strike took place, by damage to engine, on twin engine aircraft, between}
-\hlcom{# 2002 and 2010, inclusive?}
+\hlcom{# What is the mean distance from the airport, in kilometers,}
+\hlcom{# where the strike took place, by damage to engine, on twin}
+\hlcom{# engine aircraft, between 2002 and 2010, inclusive?}
 \hlkwd{summarize}\hlstd{(}\hlkwd{group_by}\hlstd{(}\hlkwd{mutate}\hlstd{(}\hlkwd{filter}\hlstd{(wls, INCIDENT_YEAR} \hlopt{>=} \hlnum{2002}\hlstd{, INCIDENT_YEAR} \hlopt{<=}
-    \hlnum{2010}\hlstd{, NUM_ENGS} \hlopt{==} \hlnum{2}\hlstd{),} \hlkwc{DISTANCE_KM} \hlstd{= DISTANCE} \hlopt{*} \hlnum{1.60934}\hlstd{), DAM_ENG1, DAM_ENG2),}
-    \hlkwc{`mean distance in KM`} \hlstd{=} \hlkwd{mean}\hlstd{(DISTANCE_KM,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{))}
+    \hlnum{2010}\hlstd{, NUM_ENGS} \hlopt{==} \hlnum{2}\hlstd{),} \hlkwc{DISTANCE_KM} \hlstd{= DISTANCE} \hlopt{*} \hlnum{1.60934}\hlstd{), DAM_ENG1,}
+    \hlstd{DAM_ENG2),} \hlkwc{`mean distance in KM`} \hlstd{=} \hlkwd{mean}\hlstd{(DISTANCE_KM,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [4 x 3]
@@ -829,8 +842,9 @@ inputs create multiple output summaries.  (Two spellings:
 ## 4     TRUE     TRUE              0.6584
 \end{verbatim}
 \begin{alltt}
-\hlcom{# Without a comment to explain, how long would it take to explain the above}
-\hlcom{# code?  You need to read from the inside out.  THERE IS A BETTER WAY!}
+\hlcom{# Without a comment to explain, how long would it take to}
+\hlcom{# explain the above code?  You need to read from the inside}
+\hlcom{# out.  THERE IS A BETTER WAY!}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -904,17 +918,13 @@ follow.
 \begin{verbatim}
 ## Source: local data frame [96,600 x 24]
 ## 
-##     playerID yearID stint teamID lgID  G G_batting AB R H X2B X3B HR RBI
-## 1  aardsda01   2004     1    SFN   NL 11        11  0 0 0   0   0  0   0
-## 2  aardsda01   2006     1    CHN   NL 45        43  2 0 0   0   0  0   0
-## 3  aardsda01   2007     1    CHA   AL 25         2  0 0 0   0   0  0   0
-## ..       ...    ...   ...    ...  ... ..       ... .. . . ... ... .. ...
-##    SB
-## 1   0
-## 2   0
-## 3   0
-## .. ..
-## Variables not shown: CS (int), BB (int), SO (int), IBB (int), HBP (int),
+##     playerID yearID stint teamID lgID  G G_batting AB R H X2B
+## 1  aardsda01   2004     1    SFN   NL 11        11  0 0 0   0
+## 2  aardsda01   2006     1    CHN   NL 45        43  2 0 0   0
+## 3  aardsda01   2007     1    CHA   AL 25         2  0 0 0   0
+## ..       ...    ...   ...    ...  ... ..       ... .. . . ...
+## Variables not shown: X3B (int), HR (int), RBI (int), SB
+##   (int), CS (int), BB (int), SO (int), IBB (int), HBP (int),
 ##   SH (int), SF (int), GIDP (int), G_old (int)
 \end{verbatim}
 \begin{alltt}
@@ -923,14 +933,15 @@ follow.
 \begin{verbatim}
 ## Source: local data frame [41,857 x 30]
 ## 
-##     playerID yearID stint teamID lgID W L  G GS CG SHO SV IPouts  H ER HR
-## 1  aardsda01   2004     1    SFN   NL 1 0 11  0  0   0  0     32 20  8  1
-## 2  aardsda01   2006     1    CHN   NL 3 0 45  0  0   0  0    159 41 24  9
-## 3  aardsda01   2007     1    CHA   AL 2 1 25  0  0   0  0     97 39 23  4
-## ..       ...    ...   ...    ...  ... . . .. .. .. ... ..    ... .. .. ..
-## Variables not shown: BB (int), SO (int), BAOpp (dbl), ERA (dbl), IBB
-##   (int), WP (int), HBP (int), BK (int), BFP (int), GF (int), R (int), SH
-##   (lgl), SF (lgl), GIDP (lgl)
+##     playerID yearID stint teamID lgID W L  G GS CG SHO SV
+## 1  aardsda01   2004     1    SFN   NL 1 0 11  0  0   0  0
+## 2  aardsda01   2006     1    CHN   NL 3 0 45  0  0   0  0
+## 3  aardsda01   2007     1    CHA   AL 2 1 25  0  0   0  0
+## ..       ...    ...   ...    ...  ... . . .. .. .. ... ..
+## Variables not shown: IPouts (int), H (int), ER (int), HR
+##   (int), BB (int), SO (int), BAOpp (dbl), ERA (dbl), IBB
+##   (int), WP (int), HBP (int), BK (int), BFP (int), GF (int),
+##   R (int), SH (lgl), SF (lgl), GIDP (lgl)
 \end{verbatim}
 \begin{alltt}
 \hlkwd{print}\hlstd{(person_df,}   \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
@@ -938,18 +949,21 @@ follow.
 \begin{verbatim}
 ## Source: local data frame [18,125 x 35]
 ## 
-##    lahmanID  playerID managerID      hofID birthYear birthMonth birthDay
-## 1         1 aaronha01        NA aaronha01h      1934          2        5
-## 2         2 aaronto01        NA         NA      1939          8        5
-## 3         3  aasedo01        NA         NA      1954          9        8
-## ..      ...       ...       ...        ...       ...        ...      ...
-## Variables not shown: birthCountry (chr), birthState (chr), birthCity
-##   (chr), deathYear (int), deathMonth (int), deathDay (int), deathCountry
-##   (chr), deathState (chr), deathCity (chr), nameFirst (chr), nameLast
-##   (chr), nameNote (chr), nameGiven (chr), nameNick (chr), weight (int),
-##   height (int), bats (fctr), throws (fctr), debut (date), finalGame
-##   (date), college (chr), lahman40ID (chr), lahman45ID (chr), retroID
-##   (chr), holtzID (chr), bbrefID (chr), deathDate (date), birthDate (date)
+##    lahmanID  playerID managerID      hofID birthYear
+## 1         1 aaronha01        NA aaronha01h      1934
+## 2         2 aaronto01        NA         NA      1939
+## 3         3  aasedo01        NA         NA      1954
+## ..      ...       ...       ...        ...       ...
+## Variables not shown: birthMonth (int), birthDay (int),
+##   birthCountry (chr), birthState (chr), birthCity (chr),
+##   deathYear (int), deathMonth (int), deathDay (int),
+##   deathCountry (chr), deathState (chr), deathCity (chr),
+##   nameFirst (chr), nameLast (chr), nameNote (chr), nameGiven
+##   (chr), nameNick (chr), weight (int), height (int), bats
+##   (fctr), throws (fctr), debut (date), finalGame (date),
+##   college (chr), lahman40ID (chr), lahman45ID (chr), retroID
+##   (chr), holtzID (chr), bbrefID (chr), deathDate (date),
+##   birthDate (date)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1025,8 +1039,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   4.104        9
-## 2 dplyr          100   0.456        1
+## 1  base          100   4.331    8.492
+## 2 dplyr          100   0.510    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1088,8 +1102,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   4.411    3.227
-## 2 dplyr          100   1.367    1.000
+## 1  base          100   4.649    3.135
+## 2 dplyr          100   1.483    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1249,8 +1263,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base           10   132.0    3.686
-## 2 dplyr           10    35.8    1.000
+## 1  base           10  137.06    4.005
+## 2 dplyr           10   34.23    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1317,15 +1331,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base         1000   4.511    1.508
-## 2 dplyr         1000   2.991    1.000
+## 1  base         1000   4.382    1.547
+## 2 dplyr         1000   2.832    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
   {\tt dplyr} is fast, fast enough to overcome the additional scripting.
 \end{frame} 
 %}}}
-
 
 \subsection{Memory Usage}%{{{
 \begin{frame}[fragile]
@@ -1345,25 +1358,25 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old        new      
-## var1      0x4fd0ce58 0x34e7010
+##           old       new       
+## var1      0x99c6218 0x448e6538
 ## 
 ## Changed attributes:
-##           old       new      
-## row.names 0x7348e38 0x7349150
+##           old       new       
+## row.names 0xee6a0a8 0x17099d98
 \end{verbatim}
 \begin{alltt}
 \hlkwd{location}\hlstd{(this_df2)}
 \end{alltt}
 \begin{verbatim}
-## <0x2f459c68>
+## <0x1285fe20>
 ## Variables:
-##  * var1:      <0x34e7010 >
-##  * var2:      <0x4fd23750>
+##  * var1:      <0x448e6538>
+##  * var2:      <0x99bdb18 >
 ## Attributes:
-##  * names:     <0x2f459d10>
-##  * row.names: <0xa94a308 >
-##  * class:     <0x13f6af08>
+##  * names:     <0x1285fec8>
+##  * row.names: <0x46354e88>
+##  * class:     <0x87403d8 >
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1388,14 +1401,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old        new       
-## var1      0x159f99e8 0x3ef6a910
+##           old       new       
+## var1      0x892c5a0 0x1de454d0
 ## 
 ## Changed attributes:
-##           old        new      
-## names     0x53bbf10  0x5981f08
-## class     0x47036b68 0x620e5d0
-## row.names 0xce43c08  0xce43f20
+##           old        new       
+## names     0x23a7bba0 0x8868c98 
+## class     0x17fffff8 0x1de05d10
+## row.names 0x67f1578  0x67f1890
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1652,7 +1665,7 @@ follow.
 \hlopt{-}\hlnum{2} \hlopt{*} \hlkwd{log}\hlstd{((}\hlnum{1}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{))}\hlopt{^}\hlstd{(N)} \hlopt{*} \hlkwd{exp}\hlstd{(}\hlopt{-}\hlnum{1}\hlopt{/}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{*} \hlkwd{sum}\hlstd{((y} \hlopt{-} \hlstd{mu)}\hlopt{^}\hlnum{2}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
-## [1] 24.06
+## [1] 27.67
 \end{verbatim}
 \begin{alltt}
 \hlcom{# -2 log likelihood, using forward-piping, somewhat like postfix notation}
@@ -1667,7 +1680,7 @@ follow.
 \hlkwd{multiply_by}\hlstd{(}\hlopt{-}\hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 24.06
+## [1] 27.67
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1691,17 +1704,19 @@ What do you think?  Pros and Cons?
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## 
 ## attached base packages:
-## [1] compiler  stats     graphics  grDevices utils     datasets  methods  
-## [8] base     
+## [1] stats     graphics  grDevices utils     datasets 
+## [6] methods   base     
 ## 
 ## other attached packages:
-## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1   knitr_1.6       
-## [5] vimcom_0.9-93    setwidth_1.0-3   colorout_1.0-3  
+## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1  
+## [4] knitr_1.6        vimcom_0.9-93    setwidth_1.0-3  
+## [7] colorout_1.0-3  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4    evaluate_0.5.5 
-##  [5] formatR_0.10    highr_0.3       parallel_3.1.0  Rcpp_0.11.2    
-##  [9] stringr_0.6.2   tools_3.1.0
+##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4   
+##  [4] evaluate_0.5.5  formatR_0.10    highr_0.3      
+##  [7] parallel_3.1.0  Rcpp_0.11.2     stringr_0.6.2  
+## [10] tools_3.1.0
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
