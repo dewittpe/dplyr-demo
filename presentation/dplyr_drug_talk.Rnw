@@ -444,7 +444,7 @@ summarize(group_by(mutate(filter(wls,
           "mean distance in KM" = mean(DISTANCE_KM, na.rm = TRUE))
 # Without a comment to explain, how long would it take to
 # explain the above code?  You need to read from the inside
-# out.  THERE IS A BETTER WAY
+# out.  THERE IS A BETTER WAY!
 @
 \end{frame} 
 
@@ -481,46 +481,296 @@ follow.
         \item {\tt right\_join}, and
         \item {\tt cross\_join}.
       \end{itemize}
-      %      ‘inner_join’ return all rows from x where there are matching values in y,
-      %           and all columns from x and y. If there are multiple matches between
-      %           x and y, all combination of the matches are returned.
-      % 
-      %      ‘left_join’ return all rows from x, and all columns from x and y. If
-      %           there are multiple matches between x and y, all combination of the
-      %           matches are returned.
-      % 
-      %      ‘semi_join’ return all rows from x where there are matching values in y,
-      %           keeping just columns from x.
-      % 
-      %           A semi join differs from an inner join because an inner join will
-      %           return one row of ‘x’ for each matching row of ‘y’, where a semi
-      %           join will never duplicate rows of ‘x’.
-      % 
-      %      ‘anti_join’ return all rows from x where there are not matching values in
-      %           y, keeping just columns from x
   \end{itemize}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
+<<>>=
+# Baseball data from Lahman
+batting_df  <- data("Batting",  package = "Lahman")
+pitching_df <- data("Pitching", package = "Lahman")
+person_df   <- data("Master",   package = "Lahman")
+batting_df  <- Batting  %>% tbl_df()
+pitching_df <- Pitching %>% tbl_df()
+person_df   <- Master   %>% tbl_df()
+print(batting_df,  n = 3)
+print(pitching_df, n = 3)
+print(person_df,   n = 3) 
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt inner\_join}}
+  Return all rows from x where there are matching values in y,
+  and all columns from x and y. If there are multiple matches between
+  x and y, all combination of the matches are returned.
+
+<<>>=
+# build a data.frame for the pitching stats of players born in Colorado
+person_df %>% 
+filter(birthState == "CO") %>% 
+select(playerID) %>% 
+summarise(n_distinct(playerID))        # n_distinct is a fast length(unique())
+
+base_inner <- merge(subset(person_df, birthState == "CO"), 
+                    pitching_df, 
+                    by = "playerID", 
+                    all = FALSE) %>% 
+              tbl_df() 
+
+dplyr_inner <- person_df %>% 
+               filter(birthState == "CO") %>% 
+               inner_join(x = ., pitching_df, by = "playerID") 
+
+dplyr_inner %>% summarise(n_distinct(playerID))
+
+all.equal(base_inner, dplyr_inner)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt inner\_join}}
+<<>>=
+bnch <- 
+  benchmark(base = merge(subset(person_df, birthState == "CO"), 
+                         pitching_df, 
+                         by = "playerID", 
+                         all = FALSE),
+            dplyr = person_df %>% filter(birthState == "CO") %>% 
+                    inner_join(x = ., pitching_df, by = "playerID"), 
+            replications = 100)
+bnch %>% select(test, replications, elapsed, relative) 
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt left\_join}} 
+  Return all rows from x, and all columns from x and y. If
+  there are multiple matches between x and y, all combination of the
+  matches are returned.
+
+<<>>=
+base_left <- merge(subset(person_df, birthState == "CO"),
+                   pitching_df, 
+                   by = "playerID", 
+                   all.x = TRUE) %>%
+             tbl_df()
+
+dplyr_left <- person_df %>% 
+              filter(birthState == "CO") %>% 
+              left_join(x = ., pitching_df, by = "playerID") 
+
+dplyr_left %>% summarise(n_distinct(playerID))
+
+all.equal(base_left, dplyr_left) 
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt left\_join}}
+<<>>=
+bnch <- 
+  benchmark(base = merge(subset(person_df, birthState == "CO"), 
+                         pitching_df, 
+                         by = "playerID", 
+                         all.x = TRUE),
+            dplyr = person_df %>% filter(birthState == "CO") %>% 
+                    left_join(x = ., pitching_df, by = "playerID"), 
+            replications = 100)
+bnch %>% select(test, replications, elapsed, relative) 
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt semi\_join}}
+  Return all rows from x where there are matching values in y,
+  keeping just columns from x.
+
+  A semi join differs from an inner join because an inner join will
+  return one row of ‘x’ for each matching row of ‘y’, where a semi
+  join will never duplicate rows of ‘x’.
+
+<<>>=
+dplyr_semi <- semi_join(person_df %>% filter(birthState == "CO"), 
+                        pitching_df, 
+                        by = "playerID")
+dplyr_inner %>% dim()
+dplyr_semi %>% dim()
+
+# the semi join returns a subset of the person_df data.frame which has at least
+# one match in the pitching_df.
+@
+
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt anti\_join}}
+  Return all rows from x where there are not matching values in
+  y, keeping just columns from x
+
+<<>>=
+dplyr_left %>% summarise(n_distinct(playerID))
+dplyr_semi %>% summarise(n_distinct(playerID))
+# there are 83 - 54 = 29 players who have no pitching stats... who are they?
+
+dplyr_anti <- anti_join(person_df %>% filter(birthState == "CO"), 
+                        pitching_df, 
+                        by = "playerID")
+dplyr_anti %>% dim() 
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
+  Return all rows from x and y, keeping all columns of x and y.
+
+  Not implimented in {\tt dplyr\_0.2}, will be implimented in {\tt dplyr\_0.3}.
+
+<<>>=
+base_outer <- merge(batting_df, pitching_df, 
+                    by = "playerID", all = TRUE,
+                    suffixes = c(".batting", ".pitching")) %>% 
+              tbl_df()
+
+# workaround for dplyr_0.2, outer_join should be part of dplyr_0.3
+my_outer_join <- function(dfx, dfy, suffixes = c(".x", ".y"), ...) { 
+
+  # d1 <- left_join(batting_df, pitching_df, by = "playerID")
+  # d2 <- left_join(pitching_df, batting_df, by = "playerID")
+  d1 <- left_join(dfx, dfy, ...)
+  d2 <- left_join(dfy, dfx, ...)
+
+  names(d1) <- names(d1) %>% 
+  gsub("\\.x", suffixes[1], x = .)  %>%
+  gsub("\\.y", suffixes[2], x = .)
+  names(d2) <- names(d2) %>% 
+  gsub("\\.y", suffixes[1], x = .)  %>%
+  gsub("\\.x", suffixes[2], x = .)
+
+  out <- dplyr::union(d1, d2)
+  return(out)
+}
+
+dplyr_outer <- my_outer_join(batting_df, pitching_df, 
+                             c(".batting", ".pitching"), 
+                             by = "playerID")
+
+all.equal(base_outer, dplyr_outer) 
+dim(dplyr_outer)
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
+  The workaround is still faster than using {\tt base::merge}!
+<<>>=
+bnch <- 
+  benchmark(base = {
+              base_outer <- merge(batting_df, pitching_df, 
+                                  by = "playerID", all = TRUE,
+                                  suffixes = c(".batting", ".pitching"))
+                    },
+            dplyr = { 
+              dplyr_outer <- my_outer_join(batting_df, pitching_df, 
+                                           c(".batting", ".pitching"), 
+                                           by = "playerID")
+            }, 
+            replications = 10)
+
+bnch %>% select(test, replications, elapsed, relative) 
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
+  \begin{itemize}
+    \item {\tt right\_join(y, x)} $\equiv$ {\tt left\_join(x, y)}
+    \item {\tt cross\_join(x, y)}: every row of {\tt y} is matched with every row
+      of {\tt x}.
+  \end{itemize}
+<<>>=
+dfx <- data.frame(id = 1:15, var1 = rnorm(15), var2 = runif(15))
+dfy <- data.frame(id = 1:8, var1 = LETTERS[1:8], var2 = letters[1:8])
+
+base_cross <- merge(dfx, dfy, by = NULL) %>% tbl_df()
+
+# my_cross_join, a function for cross joins via dplyr
+my_cross_join <- function(dfx, dfy) { 
+  nrx <- nrow(dfx)
+
+  dfy2 <- replicate(nrx, dfy, simplify = FALSE) %>% 
+          rbind_all() %>% 
+          mutate(special.id = rep(1:nrx, each = nrow(dfy)))
+  dfx2 <- dfx %>% mutate(special.id = 1:nrx)
+  out <- inner_join(dfx2, dfy2, by = "special.id") %>% select(-special.id)
+  return(out)
+}
+
+dplyr_cross <- my_cross_join(dfx, dfy)
+
+all.equal(base_cross, dplyr_cross)
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt cross\_join}} 
+<<>>=
+dfx <- data.frame(id = 1:60, var1 = rnorm(60), var2 = runif(60))
+dfy <- data.frame(id = 1:13, var1 = LETTERS[1:13], var2 = letters[1:13])
+
+bnch <- 
+  benchmark(base = {
+              base_cross <- merge(dfx, dfy, by = NULL) %>% tbl_df()
+            }, 
+            dplyr = {
+              dplyr_cross <- my_cross_join(dfx, dfy)
+            }, 
+            replications = 1000)
+
+bnch %>% select(test, replications, elapsed, relative) 
+@
+  {\tt dplyr} is fast, fast enough to overcome the additional scripting.
 \end{frame} 
 %}}}
 
+
 \subsection{Memory Usage}%{{{
 \begin{frame}[fragile]
-  \frametitle{Improved memory usage} 
+  \frametitle{Memory usage} 
 <<>>=
 this_df2 <- this_df <- data.frame(var1 = 1:5, var2 = rnorm(5))
 changes(this_df, this_df2)
 this_df$var1 <- rexp(5, rate = 2)
 changes(this_df, this_df2)
+location(this_df2)
 @
+  Prior to 3.0.1 the edit to {\tt var1} would have created a deep copy of {\tt
+  this\_df}.
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{Improved memory usage}
+  \frametitle{Memory usage}
 <<>>=
 this_df2 <- this_df <- data.frame(var1 = 1:5, var2 = rnorm(5)) %>% tbl_df()
 changes(this_df, this_df2) 
 this_df <- this_df %>% mutate(var1 = rexp(5))
 changes(this_df, this_df2)
 @
+  {\tt dplyr} ``smart enough to create only one new column: all the other
+  columns continue to point at their old locations.''
 \end{frame} 
 
 \begin{frame}[fragile]
@@ -544,10 +794,57 @@ changes(this_df, this_df2)
 \subsection{Window Functions}%{{{
 \begin{frame}[fragile]
   \frametitle{Window Functions}
+  \begin{itemize}
+    \item See {\tt vignette("window-functions", package = "dplyr")}
+
+    \item window functions are variations of aggreation functions.
+
+      \begin{itemize}
+        \item Aggregation functions such as {\tt sum()} and {\tt median()} are
+          maps between $\mathbb{R}^n \rightarrow \mathbb{R}^1$.
+        \item Window function are maps between $\mathbb{R}^n \rightarrow \mathbb{R}^n$.
+          Examples: {\tt cumsum()}, {\tt rank()}, {\tt lag()}
+      \end{itemize} 
+  \end{itemize} 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples}
 <<>>=
-# see vignette("window-functions", package = "dplyr")
+batting <- Batting %>% tbl_df() %>% 
+           select(playerID, yearID, teamID, G, AB:H, HR) 
+
+# For each player, find the two years with most hits
+batting %>% 
+  group_by(playerID) %>%
+  filter(min_rank(desc(H)) <= 2 & H > 0)
+
+# Within each player, rank each year by the number of games played
+batting %>% 
+  group_by(playerID) %>%
+  mutate(G_rank = min_rank(G))
+
+# For each player, the proportion of years with more home runs than the prior
+# year
+batting %>% 
+  group_by(playerID) %>%
+  mutate(more_hrs = HR > lag(HR)) %>%                 # Window function
+  summarize(more_hrs = mean(more_hrs, na.rm = TRUE))  # aggregate function
+
+# For each player, compute avg change in games played per year
+batting %>% 
+  group_by(playerID) %>%
+  mutate(G_change = (G - lag(G)) / (yearID - lag(yearID)))
+
+# For each player, find all when they played more games than average
+batting %>% 
+  group_by(playerID) %>%
+  filter(G > mean(G)) %>%
+  select(playerID, yearID) 
 @
 \end{frame} 
+
 %}}}
 
 \subsection{Other data sources}%{{{
@@ -622,20 +919,27 @@ changes(this_df, this_df2)
   \framesubtitle{Examples} 
 
 <<"magrittr-examples">>=
-data(diamonds, package = "ggplot2")
+mu <- 1
+sigma <- 4
+N <- 5
+y <- rnorm(N, mu, sigma)
 
-# find the mean price of the diamonds
-# Standard R syntax
-mean(diamonds$price)
+# -2 log likelihood, standard nested operations, i.e, infix notation
+-2 * log((1/sqrt(2 * pi * sigma^2))^(N) * exp(-1/(2 * sigma^2) * sum((y - mu)^2)))
 
-# with the pipe
-diamonds %>% 
-extract("price") %>% 
-unlist() %>% 
-mean()
+# -2 log likelihood, using forward-piping, somewhat like postfix notation
+y %>% 
+subtract(mu) %>%
+raise_to_power(2) %>% 
+sum %>%
+divide_by(-2 * sigma^2) %>%
+exp %>%
+multiply_by((2 * pi * sigma^2)^(-N/2)) %>% 
+log %>%
+multiply_by(-2)
 @
+What do you think?  Pros and Cons?
 
-What's the point?
 \end{frame} 
 %}}}
 

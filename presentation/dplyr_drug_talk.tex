@@ -186,8 +186,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   92.98    3.968
-## 2 dplyr          100   23.43    1.000
+## 1  base          100   88.90    3.872
+## 2 dplyr          100   22.96    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -239,37 +239,32 @@
 \begin{verbatim}
 ## Source: local data frame [142,911 x 94]
 ## 
-##    INDEX_NR OPID          OPERATOR     ATYPE AMA AMO EMA EMO
-## 1    100000  AAL AMERICAN AIRLINES     B-727 148  10  34  10
-## 2    100001  UAL   UNITED AIRLINES B-737-300 148  24  10  01
-## ..      ...  ...               ...       ... ... ... ... ...
-## Variables not shown: AC_CLASS (chr), AC_MASS (int), NUM_ENGS
-##   (chr), TYPE_ENG (chr), ENG_1_POS (chr), ENG_2_POS (int),
-##   ENG_3_POS (chr), ENG_4_POS (int), REG (chr), FLT (chr),
-##   REMAINS_COLLECTED (lgl), REMAINS_SENT (lgl), INCIDENT_DATE
-##   (chr), INCIDENT_MONTH (int), INCIDENT_YEAR (int),
-##   TIME_OF_DAY (chr), TIME (int), AIRPORT_ID (chr), AIRPORT
-##   (chr), STATE (chr), FAAREGION (chr), ENROUTE (chr), RUNWAY
-##   (chr), LOCATION (chr), HEIGHT (int), SPEED (int), DISTANCE
-##   (dbl), PHASE_OF_FLT (chr), DAMAGE (chr), STR_RAD (lgl),
-##   DAM_RAD (lgl), STR_WINDSHLD (lgl), DAM_WINDSHLD (lgl),
-##   STR_NOSE (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl), DAM_ENG1
-##   (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl),
-##   DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl), INGESTED
-##   (lgl), STR_PROP (lgl), DAM_PROP (lgl), STR_WING_ROT (lgl),
-##   DAM_WING_ROT (lgl), STR_FUSE (lgl), DAM_FUSE (lgl), STR_LG
-##   (lgl), DAM_LG (lgl), STR_TAIL (lgl), DAM_TAIL (lgl),
-##   STR_LGHTS (lgl), DAM_LGHTS (lgl), STR_OTHER (lgl),
-##   DAM_OTHER (lgl), OTHER_SPECIFY (chr), EFFECT (chr),
-##   EFFECT_OTHER (chr), SKY (chr), PRECIP (chr), SPECIES_ID
-##   (chr), SPECIES (chr), BIRDS_SEEN (chr), BIRDS_STRUCK (chr),
-##   SIZE (chr), WARNED (chr), COMMENTS (chr), REMARKS (chr),
-##   AOS (int), COST_REPAIRS (int), COST_OTHER (int),
-##   COST_REPAIRS_INFL_ADJ (int), COST_OTHER_INFL_ADJ (int),
-##   REPORTED_NAME (chr), REPORTED_TITLE (chr), REPORTED_DATE
-##   (chr), SOURCE (chr), PERSON (chr), NR_INJURIES (int),
-##   NR_FATALITIES (int), LUPDATE (chr), TRANSFER (lgl),
-##   INDICATED_DAMAGE (lgl)
+##    INDEX_NR OPID          OPERATOR     ATYPE AMA AMO EMA EMO AC_CLASS
+## 1    100000  AAL AMERICAN AIRLINES     B-727 148  10  34  10        A
+## 2    100001  UAL   UNITED AIRLINES B-737-300 148  24  10  01        A
+## ..      ...  ...               ...       ... ... ... ... ...      ...
+## Variables not shown: AC_MASS (int), NUM_ENGS (chr), TYPE_ENG (chr),
+##   ENG_1_POS (chr), ENG_2_POS (int), ENG_3_POS (chr), ENG_4_POS (int), REG
+##   (chr), FLT (chr), REMAINS_COLLECTED (lgl), REMAINS_SENT (lgl),
+##   INCIDENT_DATE (chr), INCIDENT_MONTH (int), INCIDENT_YEAR (int),
+##   TIME_OF_DAY (chr), TIME (int), AIRPORT_ID (chr), AIRPORT (chr), STATE
+##   (chr), FAAREGION (chr), ENROUTE (chr), RUNWAY (chr), LOCATION (chr),
+##   HEIGHT (int), SPEED (int), DISTANCE (dbl), PHASE_OF_FLT (chr), DAMAGE
+##   (chr), STR_RAD (lgl), DAM_RAD (lgl), STR_WINDSHLD (lgl), DAM_WINDSHLD
+##   (lgl), STR_NOSE (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl), DAM_ENG1 (lgl),
+##   STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl), DAM_ENG3 (lgl), STR_ENG4
+##   (lgl), DAM_ENG4 (lgl), INGESTED (lgl), STR_PROP (lgl), DAM_PROP (lgl),
+##   STR_WING_ROT (lgl), DAM_WING_ROT (lgl), STR_FUSE (lgl), DAM_FUSE (lgl),
+##   STR_LG (lgl), DAM_LG (lgl), STR_TAIL (lgl), DAM_TAIL (lgl), STR_LGHTS
+##   (lgl), DAM_LGHTS (lgl), STR_OTHER (lgl), DAM_OTHER (lgl), OTHER_SPECIFY
+##   (chr), EFFECT (chr), EFFECT_OTHER (chr), SKY (chr), PRECIP (chr),
+##   SPECIES_ID (chr), SPECIES (chr), BIRDS_SEEN (chr), BIRDS_STRUCK (chr),
+##   SIZE (chr), WARNED (chr), COMMENTS (chr), REMARKS (chr), AOS (int),
+##   COST_REPAIRS (int), COST_OTHER (int), COST_REPAIRS_INFL_ADJ (int),
+##   COST_OTHER_INFL_ADJ (int), REPORTED_NAME (chr), REPORTED_TITLE (chr),
+##   REPORTED_DATE (chr), SOURCE (chr), PERSON (chr), NR_INJURIES (int),
+##   NR_FATALITIES (int), LUPDATE (chr), TRANSFER (lgl), INDICATED_DAMAGE
+##   (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -314,15 +309,15 @@
 \begin{verbatim}
 ## Source: local data frame [142,911 x 9]
 ## 
-##    INCIDENT_YEAR                     AIRPORT ENG_1_POS
-## 1           1992 DALLAS/FORT WORTH INTL ARPT         5
-## 2           1996             SACRAMENTO INTL         1
-## 3           1996         DENVER INTL AIRPORT         1
-## 4           1996             EPPLEY AIRFIELD         1
-## 5           1996 WASHINGTON DULLES INTL ARPT         1
-## ..           ...                         ...       ...
-## Variables not shown: ENG_2_POS (int), DAM_ENG1 (lgl),
-##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
+##    INCIDENT_YEAR                     AIRPORT ENG_1_POS ENG_2_POS DAM_ENG1
+## 1           1992 DALLAS/FORT WORTH INTL ARPT         5         6    FALSE
+## 2           1996             SACRAMENTO INTL         1         1    FALSE
+## 3           1996         DENVER INTL AIRPORT         1         1    FALSE
+## 4           1996             EPPLEY AIRFIELD         1         1    FALSE
+## 5           1996 WASHINGTON DULLES INTL ARPT         1         1    FALSE
+## ..           ...                         ...       ...       ...      ...
+## Variables not shown: DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED
+##   (int)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -349,8 +344,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   0.007    1.000
-## 2 dplyr          100   0.032    4.571
+## 1  base          100   0.008    1.000
+## 2 dplyr          100   0.033    4.125
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -400,21 +395,21 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 15]
 ## 
-##    DAMAGE DAM_RAD DAM_WINDSHLD DAM_NOSE DAM_ENG1 DAM_ENG2
-## 1       N   FALSE        FALSE    FALSE    FALSE    FALSE
-## 2           FALSE        FALSE    FALSE    FALSE    FALSE
-## 3           FALSE        FALSE    FALSE    FALSE    FALSE
-## 4       N   FALSE        FALSE    FALSE    FALSE    FALSE
-## 5       N   FALSE        FALSE    FALSE    FALSE    FALSE
-## 6       M   FALSE        FALSE    FALSE    FALSE    FALSE
-## 7       N   FALSE        FALSE    FALSE    FALSE    FALSE
-## 8      M?   FALSE        FALSE    FALSE    FALSE    FALSE
-## 9       N   FALSE        FALSE    FALSE    FALSE    FALSE
-## 10          FALSE        FALSE    FALSE    FALSE    FALSE
-## ..    ...     ...          ...      ...      ...      ...
-## Variables not shown: DAM_ENG3 (lgl), DAM_ENG4 (lgl), DAM_PROP
-##   (lgl), DAM_WING_ROT (lgl), DAM_FUSE (lgl), DAM_LG (lgl),
-##   DAM_TAIL (lgl), DAM_LGHTS (lgl), DAM_OTHER (lgl)
+##    DAMAGE DAM_RAD DAM_WINDSHLD DAM_NOSE DAM_ENG1 DAM_ENG2 DAM_ENG3
+## 1       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 2           FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 3           FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 4       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 5       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 6       M   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 7       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 8      M?   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 9       N   FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## 10          FALSE        FALSE    FALSE    FALSE    FALSE    FALSE
+## ..    ...     ...          ...      ...      ...      ...      ...
+## Variables not shown: DAM_ENG4 (lgl), DAM_PROP (lgl), DAM_WING_ROT (lgl),
+##   DAM_FUSE (lgl), DAM_LG (lgl), DAM_TAIL (lgl), DAM_LGHTS (lgl), DAM_OTHER
+##   (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -460,25 +455,23 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 26]
 ## 
-##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS
-## 1         3        D         5         6         5        NA
-## 2         2        D         1         1                  NA
-## 3         2        D         1         1                  NA
-## 4         2        D         1         1                  NA
-## 5         2        D         1         1                  NA
-## 6         2        D         1         1                  NA
-## 7         3        D         5         6         5        NA
-## 8         2        C         4         4                  NA
-## 9         2        D         1         1                  NA
-## 10        2        D         5         5                  NA
-## ..      ...      ...       ...       ...       ...       ...
-## Variables not shown: DAMAGE (chr), DAM_RAD (lgl),
-##   DAM_WINDSHLD (lgl), DAM_NOSE (lgl), STR_ENG1 (lgl),
-##   DAM_ENG1 (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3
-##   (lgl), DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl),
-##   DAM_PROP (lgl), DAM_WING_ROT (lgl), DAM_FUSE (lgl), DAM_LG
-##   (lgl), DAM_TAIL (lgl), DAM_LGHTS (lgl), DAM_OTHER (lgl),
-##   INDICATED_DAMAGE (lgl)
+##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS DAMAGE
+## 1         3        D         5         6         5        NA      N
+## 2         2        D         1         1                  NA       
+## 3         2        D         1         1                  NA       
+## 4         2        D         1         1                  NA      N
+## 5         2        D         1         1                  NA      N
+## 6         2        D         1         1                  NA      M
+## 7         3        D         5         6         5        NA      N
+## 8         2        C         4         4                  NA     M?
+## 9         2        D         1         1                  NA      N
+## 10        2        D         5         5                  NA       
+## ..      ...      ...       ...       ...       ...       ...    ...
+## Variables not shown: DAM_RAD (lgl), DAM_WINDSHLD (lgl), DAM_NOSE (lgl),
+##   STR_ENG1 (lgl), DAM_ENG1 (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl), STR_ENG3
+##   (lgl), DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl), DAM_PROP (lgl),
+##   DAM_WING_ROT (lgl), DAM_FUSE (lgl), DAM_LG (lgl), DAM_TAIL (lgl),
+##   DAM_LGHTS (lgl), DAM_OTHER (lgl), INDICATED_DAMAGE (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -496,21 +489,20 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 14]
 ## 
-##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS
-## 1         3        D         5         6         5        NA
-## 2         2        D         1         1                  NA
-## 3         2        D         1         1                  NA
-## 4         2        D         1         1                  NA
-## 5         2        D         1         1                  NA
-## 6         2        D         1         1                  NA
-## 7         3        D         5         6         5        NA
-## 8         2        C         4         4                  NA
-## 9         2        D         1         1                  NA
-## 10        2        D         5         5                  NA
-## ..      ...      ...       ...       ...       ...       ...
-## Variables not shown: STR_ENG1 (lgl), DAM_ENG1 (lgl), STR_ENG2
-##   (lgl), DAM_ENG2 (lgl), STR_ENG3 (lgl), DAM_ENG3 (lgl),
-##   STR_ENG4 (lgl), DAM_ENG4 (lgl)
+##    NUM_ENGS TYPE_ENG ENG_1_POS ENG_2_POS ENG_3_POS ENG_4_POS STR_ENG1
+## 1         3        D         5         6         5        NA    FALSE
+## 2         2        D         1         1                  NA    FALSE
+## 3         2        D         1         1                  NA     TRUE
+## 4         2        D         1         1                  NA    FALSE
+## 5         2        D         1         1                  NA    FALSE
+## 6         2        D         1         1                  NA     TRUE
+## 7         3        D         5         6         5        NA    FALSE
+## 8         2        C         4         4                  NA    FALSE
+## 9         2        D         1         1                  NA    FALSE
+## 10        2        D         5         5                  NA    FALSE
+## ..      ...      ...       ...       ...       ...       ...      ...
+## Variables not shown: DAM_ENG1 (lgl), STR_ENG2 (lgl), DAM_ENG2 (lgl),
+##   STR_ENG3 (lgl), DAM_ENG3 (lgl), STR_ENG4 (lgl), DAM_ENG4 (lgl)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -527,12 +519,12 @@ tools to help speed up the coding, and maintenance.
 \begin{verbatim}
 ## Source: local data frame [142,911 x 9]
 ## 
-##    INCIDENT_YEAR                     AIRPORT ENG_1_POS
-## 1           1992 DALLAS/FORT WORTH INTL ARPT         5
-## 2           1996             SACRAMENTO INTL         1
-## ..           ...                         ...       ...
-## Variables not shown: ENG_2_POS (int), DAM_ENG1 (lgl),
-##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
+##    INCIDENT_YEAR                     AIRPORT ENG_1_POS ENG_2_POS DAM_ENG1
+## 1           1992 DALLAS/FORT WORTH INTL ARPT         5         6    FALSE
+## 2           1996             SACRAMENTO INTL         1         1    FALSE
+## ..           ...                         ...       ...       ...      ...
+## Variables not shown: DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED
+##   (int)
 \end{verbatim}
 \begin{alltt}
 \hlkwd{print}\hlstd{(}\hlkwd{select}\hlstd{(wls_yr,} \hlopt{-}\hlstd{AIRPORT,} \hlopt{-}\hlkwd{starts_with}\hlstd{(}\hlstr{"ENG"}\hlstd{)),} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
@@ -630,20 +622,20 @@ conditions are supplied they are combined with ‘\&’.
 \begin{verbatim}
 ## Source: local data frame [31,947 x 9]
 ## 
-##    INCIDENT_YEAR                       AIRPORT ENG_1_POS
-## 1           2001           JOHN F KENNEDY INTL          
-## 2           2001       SAN FRANCISCO INTL ARPT         1
-## 3           2001                  ORLANDO INTL         1
-## 4           2001                  MOLOKAI ARPT         4
-## 5           2001         LAMBERT-ST LOUIS INTL         5
-## 6           2001              KANSAS CITY INTL         1
-## 7           2001                       UNKNOWN         1
-## 8           2001         AKRON-CANTON REGIONAL         7
-## 9           2001 DESTIN-FORT WALTON BEACH ARPT         5
-## 10          2001           JOHN F KENNEDY INTL         1
-## ..           ...                           ...       ...
-## Variables not shown: ENG_2_POS (int), DAM_ENG1 (lgl),
-##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
+##    INCIDENT_YEAR                       AIRPORT ENG_1_POS ENG_2_POS
+## 1           2001           JOHN F KENNEDY INTL                  NA
+## 2           2001       SAN FRANCISCO INTL ARPT         1         1
+## 3           2001                  ORLANDO INTL         1         1
+## 4           2001                  MOLOKAI ARPT         4         4
+## 5           2001         LAMBERT-ST LOUIS INTL         5         5
+## 6           2001              KANSAS CITY INTL         1         1
+## 7           2001                       UNKNOWN         1         1
+## 8           2001         AKRON-CANTON REGIONAL         7        NA
+## 9           2001 DESTIN-FORT WALTON BEACH ARPT         5         5
+## 10          2001           JOHN F KENNEDY INTL         1         1
+## ..           ...                           ...       ...       ...
+## Variables not shown: DAM_ENG1 (lgl), DAM_ENG2 (lgl), HEIGHT (int),
+##   DISTANCE (dbl), SPEED (int)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -662,8 +654,8 @@ conditions are supplied they are combined with ‘\&’.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   8.038    5.402
-## 2 dplyr          100   1.488    1.000
+## 1  base          100   8.015    5.475
+## 2 dplyr          100   1.464    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -721,8 +713,8 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   5.824    1.067
-## 2 dplyr          100   5.458    1.000
+## 1  base          100   5.445    1.007
+## 2 dplyr          100   5.406    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -804,8 +796,8 @@ inputs create multiple output summaries.  (Two spellings:
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100  79.457    49.72
-## 2 dplyr          100   1.598     1.00
+## 1  base          100  79.864    53.56
+## 2 dplyr          100   1.491     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -819,12 +811,12 @@ inputs create multiple output summaries.  (Two spellings:
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# What is the mean distance from the airport, in kilometers,}
-\hlcom{# where the strike took place, by damage to engine, on twin}
-\hlcom{# engine aircraft, between 2002 and 2010, inclusive?}
+\hlcom{# What is the mean distance from the airport, in kilometers, where the}
+\hlcom{# strike took place, by damage to engine, on twin engine aircraft, between}
+\hlcom{# 2002 and 2010, inclusive?}
 \hlkwd{summarize}\hlstd{(}\hlkwd{group_by}\hlstd{(}\hlkwd{mutate}\hlstd{(}\hlkwd{filter}\hlstd{(wls, INCIDENT_YEAR} \hlopt{>=} \hlnum{2002}\hlstd{, INCIDENT_YEAR} \hlopt{<=}
-    \hlnum{2010}\hlstd{, NUM_ENGS} \hlopt{==} \hlnum{2}\hlstd{),} \hlkwc{DISTANCE_KM} \hlstd{= DISTANCE} \hlopt{*} \hlnum{1.60934}\hlstd{), DAM_ENG1,}
-    \hlstd{DAM_ENG2),} \hlkwc{`mean distance in KM`} \hlstd{=} \hlkwd{mean}\hlstd{(DISTANCE_KM,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{))}
+    \hlnum{2010}\hlstd{, NUM_ENGS} \hlopt{==} \hlnum{2}\hlstd{),} \hlkwc{DISTANCE_KM} \hlstd{= DISTANCE} \hlopt{*} \hlnum{1.60934}\hlstd{), DAM_ENG1, DAM_ENG2),}
+    \hlkwc{`mean distance in KM`} \hlstd{=} \hlkwd{mean}\hlstd{(DISTANCE_KM,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [4 x 3]
@@ -837,9 +829,8 @@ inputs create multiple output summaries.  (Two spellings:
 ## 4     TRUE     TRUE              0.6584
 \end{verbatim}
 \begin{alltt}
-\hlcom{# Without a comment to explain, how long would it take to}
-\hlcom{# explain the above code?  You need to read from the inside}
-\hlcom{# out.  THERE IS A BETTER WAY}
+\hlcom{# Without a comment to explain, how long would it take to explain the above}
+\hlcom{# code?  You need to read from the inside out.  THERE IS A BETTER WAY!}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -892,30 +883,453 @@ follow.
         \item {\tt right\_join}, and
         \item {\tt cross\_join}.
       \end{itemize}
-      %      ‘inner_join’ return all rows from x where there are matching values in y,
-      %           and all columns from x and y. If there are multiple matches between
-      %           x and y, all combination of the matches are returned.
-      % 
-      %      ‘left_join’ return all rows from x, and all columns from x and y. If
-      %           there are multiple matches between x and y, all combination of the
-      %           matches are returned.
-      % 
-      %      ‘semi_join’ return all rows from x where there are matching values in y,
-      %           keeping just columns from x.
-      % 
-      %           A semi join differs from an inner join because an inner join will
-      %           return one row of ‘x’ for each matching row of ‘y’, where a semi
-      %           join will never duplicate rows of ‘x’.
-      % 
-      %      ‘anti_join’ return all rows from x where there are not matching values in
-      %           y, keeping just columns from x
   \end{itemize}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Baseball data from Lahman}
+\hlstd{batting_df}  \hlkwb{<-} \hlkwd{data}\hlstd{(}\hlstr{"Batting"}\hlstd{,}  \hlkwc{package} \hlstd{=} \hlstr{"Lahman"}\hlstd{)}
+\hlstd{pitching_df} \hlkwb{<-} \hlkwd{data}\hlstd{(}\hlstr{"Pitching"}\hlstd{,} \hlkwc{package} \hlstd{=} \hlstr{"Lahman"}\hlstd{)}
+\hlstd{person_df}   \hlkwb{<-} \hlkwd{data}\hlstd{(}\hlstr{"Master"}\hlstd{,}   \hlkwc{package} \hlstd{=} \hlstr{"Lahman"}\hlstd{)}
+\hlstd{batting_df}  \hlkwb{<-} \hlstd{Batting}  \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
+\hlstd{pitching_df} \hlkwb{<-} \hlstd{Pitching} \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
+\hlstd{person_df}   \hlkwb{<-} \hlstd{Master}   \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
+\hlkwd{print}\hlstd{(batting_df,}  \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [96,600 x 24]
+## 
+##     playerID yearID stint teamID lgID  G G_batting AB R H X2B X3B HR RBI
+## 1  aardsda01   2004     1    SFN   NL 11        11  0 0 0   0   0  0   0
+## 2  aardsda01   2006     1    CHN   NL 45        43  2 0 0   0   0  0   0
+## 3  aardsda01   2007     1    CHA   AL 25         2  0 0 0   0   0  0   0
+## ..       ...    ...   ...    ...  ... ..       ... .. . . ... ... .. ...
+##    SB
+## 1   0
+## 2   0
+## 3   0
+## .. ..
+## Variables not shown: CS (int), BB (int), SO (int), IBB (int), HBP (int),
+##   SH (int), SF (int), GIDP (int), G_old (int)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{print}\hlstd{(pitching_df,} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [41,857 x 30]
+## 
+##     playerID yearID stint teamID lgID W L  G GS CG SHO SV IPouts  H ER HR
+## 1  aardsda01   2004     1    SFN   NL 1 0 11  0  0   0  0     32 20  8  1
+## 2  aardsda01   2006     1    CHN   NL 3 0 45  0  0   0  0    159 41 24  9
+## 3  aardsda01   2007     1    CHA   AL 2 1 25  0  0   0  0     97 39 23  4
+## ..       ...    ...   ...    ...  ... . . .. .. .. ... ..    ... .. .. ..
+## Variables not shown: BB (int), SO (int), BAOpp (dbl), ERA (dbl), IBB
+##   (int), WP (int), HBP (int), BK (int), BFP (int), GF (int), R (int), SH
+##   (lgl), SF (lgl), GIDP (lgl)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{print}\hlstd{(person_df,}   \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [18,125 x 35]
+## 
+##    lahmanID  playerID managerID      hofID birthYear birthMonth birthDay
+## 1         1 aaronha01        NA aaronha01h      1934          2        5
+## 2         2 aaronto01        NA         NA      1939          8        5
+## 3         3  aasedo01        NA         NA      1954          9        8
+## ..      ...       ...       ...        ...       ...        ...      ...
+## Variables not shown: birthCountry (chr), birthState (chr), birthCity
+##   (chr), deathYear (int), deathMonth (int), deathDay (int), deathCountry
+##   (chr), deathState (chr), deathCity (chr), nameFirst (chr), nameLast
+##   (chr), nameNote (chr), nameGiven (chr), nameNick (chr), weight (int),
+##   height (int), bats (fctr), throws (fctr), debut (date), finalGame
+##   (date), college (chr), lahman40ID (chr), lahman45ID (chr), retroID
+##   (chr), holtzID (chr), bbrefID (chr), deathDate (date), birthDate (date)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt inner\_join}}
+  Return all rows from x where there are matching values in y,
+  and all columns from x and y. If there are multiple matches between
+  x and y, all combination of the matches are returned.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# build a data.frame for the pitching stats of players born in Colorado}
+\hlstd{person_df} \hlopt{%>%}
+\hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+\hlkwd{select}\hlstd{(playerID)} \hlopt{%>%}
+\hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}        \hlcom{# n_distinct is a fast length(unique())}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [1 x 1]
+## 
+##   n_distinct(playerID)
+## 1                   83
+\end{verbatim}
+\begin{alltt}
+\hlstd{base_inner} \hlkwb{<-} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
+                    \hlstd{pitching_df,}
+                    \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
+                    \hlkwc{all} \hlstd{=} \hlnum{FALSE}\hlstd{)} \hlopt{%>%}
+              \hlkwd{tbl_df}\hlstd{()}
+
+\hlstd{dplyr_inner} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
+               \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+               \hlkwd{inner_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+
+\hlstd{dplyr_inner} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [1 x 1]
+## 
+##   n_distinct(playerID)
+## 1                   54
+\end{verbatim}
+\begin{alltt}
+\hlkwd{all.equal}\hlstd{(base_inner, dplyr_inner)}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt inner\_join}}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{bnch} \hlkwb{<-}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
+                         \hlstd{pitching_df,}
+                         \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
+                         \hlkwc{all} \hlstd{=} \hlnum{FALSE}\hlstd{),}
+            \hlkwc{dplyr} \hlstd{= person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+                    \hlkwd{inner_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{),}
+            \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
+\hlstd{bnch} \hlopt{%>%} \hlkwd{select}\hlstd{(test, replications, elapsed, relative)}
+\end{alltt}
+\begin{verbatim}
+##    test replications elapsed relative
+## 1  base          100   4.104        9
+## 2 dplyr          100   0.456        1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt left\_join}} 
+  Return all rows from x, and all columns from x and y. If
+  there are multiple matches between x and y, all combination of the
+  matches are returned.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{base_left} \hlkwb{<-} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
+                   \hlstd{pitching_df,}
+                   \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
+                   \hlkwc{all.x} \hlstd{=} \hlnum{TRUE}\hlstd{)} \hlopt{%>%}
+             \hlkwd{tbl_df}\hlstd{()}
+
+\hlstd{dplyr_left} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
+              \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+              \hlkwd{left_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+
+\hlstd{dplyr_left} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [1 x 1]
+## 
+##   n_distinct(playerID)
+## 1                   83
+\end{verbatim}
+\begin{alltt}
+\hlkwd{all.equal}\hlstd{(base_left, dplyr_left)}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt left\_join}}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{bnch} \hlkwb{<-}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
+                         \hlstd{pitching_df,}
+                         \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
+                         \hlkwc{all.x} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+            \hlkwc{dplyr} \hlstd{= person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+                    \hlkwd{left_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{),}
+            \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
+\hlstd{bnch} \hlopt{%>%} \hlkwd{select}\hlstd{(test, replications, elapsed, relative)}
+\end{alltt}
+\begin{verbatim}
+##    test replications elapsed relative
+## 1  base          100   4.411    3.227
+## 2 dplyr          100   1.367    1.000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt semi\_join}}
+  Return all rows from x where there are matching values in y,
+  keeping just columns from x.
+
+  A semi join differs from an inner join because an inner join will
+  return one row of ‘x’ for each matching row of ‘y’, where a semi
+  join will never duplicate rows of ‘x’.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dplyr_semi} \hlkwb{<-} \hlkwd{semi_join}\hlstd{(person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
+                        \hlstd{pitching_df,}
+                        \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+\hlstd{dplyr_inner} \hlopt{%>%} \hlkwd{dim}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] 297  64
+\end{verbatim}
+\begin{alltt}
+\hlstd{dplyr_semi} \hlopt{%>%} \hlkwd{dim}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] 54 35
+\end{verbatim}
+\begin{alltt}
+\hlcom{# the semi join returns a subset of the person_df data.frame which has at least}
+\hlcom{# one match in the pitching_df.}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt anti\_join}}
+  Return all rows from x where there are not matching values in
+  y, keeping just columns from x
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dplyr_left} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [1 x 1]
+## 
+##   n_distinct(playerID)
+## 1                   83
+\end{verbatim}
+\begin{alltt}
+\hlstd{dplyr_semi} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [1 x 1]
+## 
+##   n_distinct(playerID)
+## 1                   54
+\end{verbatim}
+\begin{alltt}
+\hlcom{# there are 83 - 54 = 29 players who have no pitching stats... who are they?}
+
+\hlstd{dplyr_anti} \hlkwb{<-} \hlkwd{anti_join}\hlstd{(person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
+                        \hlstd{pitching_df,}
+                        \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+\hlstd{dplyr_anti} \hlopt{%>%} \hlkwd{dim}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] 29 35
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
+  Return all rows from x and y, keeping all columns of x and y.
+
+  Not implimented in {\tt dplyr\_0.2}, will be implimented in {\tt dplyr\_0.3}.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{base_outer} \hlkwb{<-} \hlkwd{merge}\hlstd{(batting_df, pitching_df,}
+                    \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,} \hlkwc{all} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+                    \hlkwc{suffixes} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{".batting"}\hlstd{,} \hlstr{".pitching"}\hlstd{))} \hlopt{%>%}
+              \hlkwd{tbl_df}\hlstd{()}
+
+\hlcom{# workaround for dplyr_0.2, outer_join should be part of dplyr_0.3}
+\hlstd{my_outer_join} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{dfx}\hlstd{,} \hlkwc{dfy}\hlstd{,} \hlkwc{suffixes} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{".x"}\hlstd{,} \hlstr{".y"}\hlstd{),} \hlkwc{...}\hlstd{) \{}
+
+  \hlcom{# d1 <- left_join(batting_df, pitching_df, by = "playerID")}
+  \hlcom{# d2 <- left_join(pitching_df, batting_df, by = "playerID")}
+  \hlstd{d1} \hlkwb{<-} \hlkwd{left_join}\hlstd{(dfx, dfy, ...)}
+  \hlstd{d2} \hlkwb{<-} \hlkwd{left_join}\hlstd{(dfy, dfx, ...)}
+
+  \hlkwd{names}\hlstd{(d1)} \hlkwb{<-} \hlkwd{names}\hlstd{(d1)} \hlopt{%>%}
+  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.x"}\hlstd{, suffixes[}\hlnum{1}\hlstd{],} \hlkwc{x} \hlstd{= .)}  \hlopt{%>%}
+  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.y"}\hlstd{, suffixes[}\hlnum{2}\hlstd{],} \hlkwc{x} \hlstd{= .)}
+  \hlkwd{names}\hlstd{(d2)} \hlkwb{<-} \hlkwd{names}\hlstd{(d2)} \hlopt{%>%}
+  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.y"}\hlstd{, suffixes[}\hlnum{1}\hlstd{],} \hlkwc{x} \hlstd{= .)}  \hlopt{%>%}
+  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.x"}\hlstd{, suffixes[}\hlnum{2}\hlstd{],} \hlkwc{x} \hlstd{= .)}
+
+  \hlstd{out} \hlkwb{<-} \hlstd{dplyr::}\hlkwd{union}\hlstd{(d1, d2)}
+  \hlkwd{return}\hlstd{(out)}
+\hlstd{\}}
+
+\hlstd{dplyr_outer} \hlkwb{<-} \hlkwd{my_outer_join}\hlstd{(batting_df, pitching_df,}
+                             \hlkwd{c}\hlstd{(}\hlstr{".batting"}\hlstd{,} \hlstr{".pitching"}\hlstd{),}
+                             \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+
+\hlkwd{all.equal}\hlstd{(base_outer, dplyr_outer)}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(dplyr_outer)}
+\end{alltt}
+\begin{verbatim}
+## [1] 450488     53
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
+  The workaround is still faster than using {\tt base::merge}!
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{bnch} \hlkwb{<-}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{= \{}
+              \hlstd{base_outer} \hlkwb{<-} \hlkwd{merge}\hlstd{(batting_df, pitching_df,}
+                                  \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,} \hlkwc{all} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+                                  \hlkwc{suffixes} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{".batting"}\hlstd{,} \hlstr{".pitching"}\hlstd{))}
+                    \hlstd{\},}
+            \hlkwc{dplyr} \hlstd{= \{}
+              \hlstd{dplyr_outer} \hlkwb{<-} \hlkwd{my_outer_join}\hlstd{(batting_df, pitching_df,}
+                                           \hlkwd{c}\hlstd{(}\hlstr{".batting"}\hlstd{,} \hlstr{".pitching"}\hlstd{),}
+                                           \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+            \hlstd{\},}
+            \hlkwc{replications} \hlstd{=} \hlnum{10}\hlstd{)}
+
+\hlstd{bnch} \hlopt{%>%} \hlkwd{select}\hlstd{(test, replications, elapsed, relative)}
+\end{alltt}
+\begin{verbatim}
+##    test replications elapsed relative
+## 1  base           10   132.0    3.686
+## 2 dplyr           10    35.8    1.000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
+  \begin{itemize}
+    \item {\tt right\_join(y, x)} $\equiv$ {\tt left\_join(x, y)}
+    \item {\tt cross\_join(x, y)}: every row of {\tt y} is matched with every row
+      of {\tt x}.
+  \end{itemize}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dfx} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{id} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{15}\hlstd{,} \hlkwc{var1} \hlstd{=} \hlkwd{rnorm}\hlstd{(}\hlnum{15}\hlstd{),} \hlkwc{var2} \hlstd{=} \hlkwd{runif}\hlstd{(}\hlnum{15}\hlstd{))}
+\hlstd{dfy} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{id} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{8}\hlstd{,} \hlkwc{var1} \hlstd{= LETTERS[}\hlnum{1}\hlopt{:}\hlnum{8}\hlstd{],} \hlkwc{var2} \hlstd{= letters[}\hlnum{1}\hlopt{:}\hlnum{8}\hlstd{])}
+
+\hlstd{base_cross} \hlkwb{<-} \hlkwd{merge}\hlstd{(dfx, dfy,} \hlkwc{by} \hlstd{=} \hlkwa{NULL}\hlstd{)} \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
+
+\hlcom{# my_cross_join, a function for cross joins via dplyr}
+\hlstd{my_cross_join} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{dfx}\hlstd{,} \hlkwc{dfy}\hlstd{) \{}
+  \hlstd{nrx} \hlkwb{<-} \hlkwd{nrow}\hlstd{(dfx)}
+
+  \hlstd{dfy2} \hlkwb{<-} \hlkwd{replicate}\hlstd{(nrx, dfy,} \hlkwc{simplify} \hlstd{=} \hlnum{FALSE}\hlstd{)} \hlopt{%>%}
+          \hlkwd{rbind_all}\hlstd{()} \hlopt{%>%}
+          \hlkwd{mutate}\hlstd{(}\hlkwc{special.id} \hlstd{=} \hlkwd{rep}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{nrx,} \hlkwc{each} \hlstd{=} \hlkwd{nrow}\hlstd{(dfy)))}
+  \hlstd{dfx2} \hlkwb{<-} \hlstd{dfx} \hlopt{%>%} \hlkwd{mutate}\hlstd{(}\hlkwc{special.id} \hlstd{=} \hlnum{1}\hlopt{:}\hlstd{nrx)}
+  \hlstd{out} \hlkwb{<-} \hlkwd{inner_join}\hlstd{(dfx2, dfy2,} \hlkwc{by} \hlstd{=} \hlstr{"special.id"}\hlstd{)} \hlopt{%>%} \hlkwd{select}\hlstd{(}\hlopt{-}\hlstd{special.id)}
+  \hlkwd{return}\hlstd{(out)}
+\hlstd{\}}
+
+\hlstd{dplyr_cross} \hlkwb{<-} \hlkwd{my_cross_join}\hlstd{(dfx, dfy)}
+
+\hlkwd{all.equal}\hlstd{(base_cross, dplyr_cross)}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt cross\_join}} 
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dfx} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{id} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{60}\hlstd{,} \hlkwc{var1} \hlstd{=} \hlkwd{rnorm}\hlstd{(}\hlnum{60}\hlstd{),} \hlkwc{var2} \hlstd{=} \hlkwd{runif}\hlstd{(}\hlnum{60}\hlstd{))}
+\hlstd{dfy} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{id} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{13}\hlstd{,} \hlkwc{var1} \hlstd{= LETTERS[}\hlnum{1}\hlopt{:}\hlnum{13}\hlstd{],} \hlkwc{var2} \hlstd{= letters[}\hlnum{1}\hlopt{:}\hlnum{13}\hlstd{])}
+
+\hlstd{bnch} \hlkwb{<-}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{= \{}
+              \hlstd{base_cross} \hlkwb{<-} \hlkwd{merge}\hlstd{(dfx, dfy,} \hlkwc{by} \hlstd{=} \hlkwa{NULL}\hlstd{)} \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
+            \hlstd{\},}
+            \hlkwc{dplyr} \hlstd{= \{}
+              \hlstd{dplyr_cross} \hlkwb{<-} \hlkwd{my_cross_join}\hlstd{(dfx, dfy)}
+            \hlstd{\},}
+            \hlkwc{replications} \hlstd{=} \hlnum{1000}\hlstd{)}
+
+\hlstd{bnch} \hlopt{%>%} \hlkwd{select}\hlstd{(test, replications, elapsed, relative)}
+\end{alltt}
+\begin{verbatim}
+##    test replications elapsed relative
+## 1  base         1000   4.511    1.508
+## 2 dplyr         1000   2.991    1.000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  {\tt dplyr} is fast, fast enough to overcome the additional scripting.
 \end{frame} 
 %}}}
 
+
 \subsection{Memory Usage}%{{{
 \begin{frame}[fragile]
-  \frametitle{Improved memory usage} 
+  \frametitle{Memory usage} 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -932,18 +1346,33 @@ follow.
 \begin{verbatim}
 ## Changed variables:
 ##           old        new      
-## var1      0x157ae870 0x62dca90
+## var1      0x4fd0ce58 0x34e7010
 ## 
 ## Changed attributes:
-##           old        new       
-## row.names 0x1640b390 0x157bd6b0
+##           old       new      
+## row.names 0x7348e38 0x7349150
+\end{verbatim}
+\begin{alltt}
+\hlkwd{location}\hlstd{(this_df2)}
+\end{alltt}
+\begin{verbatim}
+## <0x2f459c68>
+## Variables:
+##  * var1:      <0x34e7010 >
+##  * var2:      <0x4fd23750>
+## Attributes:
+##  * names:     <0x2f459d10>
+##  * row.names: <0xa94a308 >
+##  * class:     <0x13f6af08>
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+  Prior to 3.0.1 the edit to {\tt var1} would have created a deep copy of {\tt
+  this\_df}.
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{Improved memory usage}
+  \frametitle{Memory usage}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -959,17 +1388,19 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old        new      
-## var1      0x1936de38 0xd580f48
+##           old        new       
+## var1      0x159f99e8 0x3ef6a910
 ## 
 ## Changed attributes:
 ##           old        new      
-## names     0x87e4618  0xc1e0958
-## class     0x18ed2ad0 0xd580980
-## row.names 0x4958c40  0x4958fa0
+## names     0x53bbf10  0x5981f08
+## class     0x47036b68 0x620e5d0
+## row.names 0xce43c08  0xce43f20
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+  {\tt dplyr} ``smart enough to create only one new column: all the other
+  columns continue to point at their old locations.''
 \end{frame} 
 
 \begin{frame}[fragile]
@@ -993,14 +1424,149 @@ follow.
 \subsection{Window Functions}%{{{
 \begin{frame}[fragile]
   \frametitle{Window Functions}
+  \begin{itemize}
+    \item See {\tt vignette("window-functions", package = "dplyr")}
+
+    \item window functions are variations of aggreation functions.
+
+      \begin{itemize}
+        \item Aggregation functions such as {\tt sum()} and {\tt median()} are
+          maps between $\mathbb{R}^n \rightarrow \mathbb{R}^1$.
+        \item Window function are maps between $\mathbb{R}^n \rightarrow \mathbb{R}^n$.
+          Examples: {\tt cumsum()}, {\tt rank()}, {\tt lag()}
+      \end{itemize} 
+  \end{itemize} 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# see vignette("window-functions", package = "dplyr")}
+\hlstd{batting} \hlkwb{<-} \hlstd{Batting} \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()} \hlopt{%>%}
+           \hlkwd{select}\hlstd{(playerID, yearID, teamID, G, AB}\hlopt{:}\hlstd{H, HR)}
+
+\hlcom{# For each player, find the two years with most hits}
+\hlstd{batting} \hlopt{%>%}
+  \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
+  \hlkwd{filter}\hlstd{(}\hlkwd{min_rank}\hlstd{(}\hlkwd{desc}\hlstd{(H))} \hlopt{<=} \hlnum{2} \hlopt{&} \hlstd{H} \hlopt{>} \hlnum{0}\hlstd{)}
 \end{alltt}
+\begin{verbatim}
+## Source: local data frame [24,834 x 8]
+## Groups: playerID
+## 
+##     playerID yearID teamID   G  AB   R   H HR
+## 1  aaronha01   1959    ML1 154 629 116 223 39
+## 2  aaronha01   1963    ML1 161 631 121 201 44
+## 3  aaronto01   1962    ML1 141 334  54  77  8
+## 4  aaronto01   1968    ATL  98 283  21  69  1
+## 5   abadan01   2003    BOS   9  17   1   2  0
+## 6   abadfe01   2012    HOU  37   7   0   1  0
+## 7  abadijo01   1875    PH3  11  45   3  10  0
+## 8  abadijo01   1875    BR2   1   4   1   1  0
+## 9  abbated01   1904    BSN 154 579  76 148  3
+## 10 abbated01   1905    BSN 153 610  70 170  3
+## ..       ...    ...    ... ... ... ... ... ..
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Within each player, rank each year by the number of games played}
+\hlstd{batting} \hlopt{%>%}
+  \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{G_rank} \hlstd{=} \hlkwd{min_rank}\hlstd{(G))}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [96,600 x 9]
+## Groups: playerID
+## 
+##     playerID yearID teamID   G  AB   R   H HR G_rank
+## 1  aardsda01   2004    SFN  11   0   0   0  0      2
+## 2  aardsda01   2006    CHN  45   2   0   0  0      4
+## 3  aardsda01   2007    CHA  25   0   0   0  0      3
+## 4  aardsda01   2008    BOS  47   1   0   0  0      5
+## 5  aardsda01   2009    SEA  73   0   0   0  0      7
+## 6  aardsda01   2010    SEA  53   0   0   0  0      6
+## 7  aardsda01   2012    NYA   1  NA  NA  NA NA      1
+## 8  aaronha01   1954    ML1 122 468  58 131 13      4
+## 9  aaronha01   1955    ML1 153 602 105 189 27     13
+## 10 aaronha01   1956    ML1 153 609 106 200 26     13
+## ..       ...    ...    ... ... ... ... ... ..    ...
+\end{verbatim}
+\begin{alltt}
+\hlcom{# For each player, the proportion of years with more home runs than the prior}
+\hlcom{# year}
+\hlstd{batting} \hlopt{%>%}
+  \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{more_hrs} \hlstd{= HR} \hlopt{>} \hlkwd{lag}\hlstd{(HR))} \hlopt{%>%}                 \hlcom{# Window function}
+  \hlkwd{summarize}\hlstd{(}\hlkwc{more_hrs} \hlstd{=} \hlkwd{mean}\hlstd{(more_hrs,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{))}  \hlcom{# aggregate function}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [17,908 x 2]
+## 
+##     playerID more_hrs
+## 1  aardsda01   0.0000
+## 2  aaronha01   0.4545
+## 3  aaronto01   0.3333
+## 4   aasedo01   0.0000
+## 5   abadan01   0.0000
+## 6   abadfe01   0.0000
+## 7  abadijo01   0.0000
+## 8  abbated01   0.2222
+## 9  abbeybe01   0.0000
+## 10 abbeych01   0.7500
+## ..       ...      ...
+\end{verbatim}
+\begin{alltt}
+\hlcom{# For each player, compute avg change in games played per year}
+\hlstd{batting} \hlopt{%>%}
+  \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{G_change} \hlstd{= (G} \hlopt{-} \hlkwd{lag}\hlstd{(G))} \hlopt{/} \hlstd{(yearID} \hlopt{-} \hlkwd{lag}\hlstd{(yearID)))}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [96,600 x 9]
+## Groups: playerID
+## 
+##     playerID yearID teamID   G  AB   R   H HR G_change
+## 1  aardsda01   2004    SFN  11   0   0   0  0       NA
+## 2  aardsda01   2006    CHN  45   2   0   0  0       17
+## 3  aardsda01   2007    CHA  25   0   0   0  0      -20
+## 4  aardsda01   2008    BOS  47   1   0   0  0       22
+## 5  aardsda01   2009    SEA  73   0   0   0  0       26
+## 6  aardsda01   2010    SEA  53   0   0   0  0      -20
+## 7  aardsda01   2012    NYA   1  NA  NA  NA NA      -26
+## 8  aaronha01   1954    ML1 122 468  58 131 13       NA
+## 9  aaronha01   1955    ML1 153 602 105 189 27       31
+## 10 aaronha01   1956    ML1 153 609 106 200 26        0
+## ..       ...    ...    ... ... ... ... ... ..      ...
+\end{verbatim}
+\begin{alltt}
+\hlcom{# For each player, find all when they played more games than average}
+\hlstd{batting} \hlopt{%>%}
+  \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
+  \hlkwd{filter}\hlstd{(G} \hlopt{>} \hlkwd{mean}\hlstd{(G))} \hlopt{%>%}
+  \hlkwd{select}\hlstd{(playerID, yearID)}
+\end{alltt}
+\begin{verbatim}
+## Source: local data frame [47,769 x 2]
+## Groups: playerID
+## 
+##     playerID yearID
+## 1  aardsda01   2006
+## 2  aardsda01   2008
+## 3  aardsda01   2009
+## 4  aardsda01   2010
+## 5  aaronha01   1955
+## 6  aaronha01   1956
+## 7  aaronha01   1957
+## 8  aaronha01   1958
+## 9  aaronha01   1959
+## 10 aaronha01   1960
+## ..       ...    ...
+\end{verbatim}
 \end{kframe}
 \end{knitrout}
 \end{frame} 
+
 %}}}
 
 \subsection{Other data sources}%{{{
@@ -1077,29 +1643,36 @@ follow.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{data}\hlstd{(diamonds,} \hlkwc{package} \hlstd{=} \hlstr{"ggplot2"}\hlstd{)}
+\hlstd{mu} \hlkwb{<-} \hlnum{1}
+\hlstd{sigma} \hlkwb{<-} \hlnum{4}
+\hlstd{N} \hlkwb{<-} \hlnum{5}
+\hlstd{y} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(N, mu, sigma)}
 
-\hlcom{# find the mean price of the diamonds}
-\hlcom{# Standard R syntax}
-\hlkwd{mean}\hlstd{(diamonds}\hlopt{$}\hlstd{price)}
+\hlcom{# -2 log likelihood, standard nested operations, i.e, infix notation}
+\hlopt{-}\hlnum{2} \hlopt{*} \hlkwd{log}\hlstd{((}\hlnum{1}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{))}\hlopt{^}\hlstd{(N)} \hlopt{*} \hlkwd{exp}\hlstd{(}\hlopt{-}\hlnum{1}\hlopt{/}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{*} \hlkwd{sum}\hlstd{((y} \hlopt{-} \hlstd{mu)}\hlopt{^}\hlnum{2}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
-## [1] 3933
+## [1] 24.06
 \end{verbatim}
 \begin{alltt}
-\hlcom{# with the pipe}
-\hlstd{diamonds} \hlopt{%>%}
-\hlkwd{extract}\hlstd{(}\hlstr{"price"}\hlstd{)} \hlopt{%>%}
-\hlkwd{unlist}\hlstd{()} \hlopt{%>%}
-\hlkwd{mean}\hlstd{()}
+\hlcom{# -2 log likelihood, using forward-piping, somewhat like postfix notation}
+\hlstd{y} \hlopt{%>%}
+\hlkwd{subtract}\hlstd{(mu)} \hlopt{%>%}
+\hlkwd{raise_to_power}\hlstd{(}\hlnum{2}\hlstd{)} \hlopt{%>%}
+\hlstd{sum} \hlopt{%>%}
+\hlkwd{divide_by}\hlstd{(}\hlopt{-}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{%>%}
+\hlstd{exp} \hlopt{%>%}
+\hlkwd{multiply_by}\hlstd{((}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{^}\hlstd{(}\hlopt{-}\hlstd{N}\hlopt{/}\hlnum{2}\hlstd{))} \hlopt{%>%}
+\hlstd{log} \hlopt{%>%}
+\hlkwd{multiply_by}\hlstd{(}\hlopt{-}\hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 3933
+## [1] 24.06
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+What do you think?  Pros and Cons?
 
-What's the point?
 \end{frame} 
 %}}}
 
@@ -1118,19 +1691,17 @@ What's the point?
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets 
-## [6] methods   base     
+## [1] compiler  stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
 ## 
 ## other attached packages:
-## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1  
-## [4] knitr_1.6        vimcom_0.9-93    setwidth_1.0-3  
-## [7] colorout_1.0-3  
+## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1   knitr_1.6       
+## [5] vimcom_0.9-93    setwidth_1.0-3   colorout_1.0-3  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4   
-##  [4] evaluate_0.5.5  formatR_0.10    highr_0.3      
-##  [7] parallel_3.1.0  qwraps_0.2.2    Rcpp_0.11.1    
-## [10] stringr_0.6.2   tcltk_3.1.0     tools_3.1.0
+##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4    evaluate_0.5.5 
+##  [5] formatR_0.10    highr_0.3       parallel_3.1.0  Rcpp_0.11.2    
+##  [9] stringr_0.6.2   tools_3.1.0
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
