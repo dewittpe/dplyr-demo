@@ -53,13 +53,15 @@ opts_chunk$set(fig.align = "center",
   \frametitle{Goals:}
 
   \begin{itemize}
-    \item Showcase {\tt dplyr}, compare the ease of use compared to base R.
+    \item Showcase {\tt dplyr}, compare the ease of use and speed to base R.
     \item Introduce the data manipulation grammar and philosophy behind {\tt
       dplyr}
     \item Illustrate the usefulness of the forward-piping operator which is
       part of {\tt dplyr} and extended further in {\tt magrittr}.  
 
-    \item {\tt dplyr} will save time in initial coding, debugging, code
+    \item[]
+
+    \item Convey: {\tt dplyr} will save time in initial coding, debugging, code
       maintenance, \ldots
   \end{itemize}
 
