@@ -196,8 +196,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   55.52    4.714
-## 2 dplyr          100   11.78    1.000
+## 1  base          100  113.09    4.625
+## 2 dplyr          100   24.45    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -360,8 +360,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   0.003    1.000
-## 2 dplyr          100   0.014    4.667
+## 1  base          100   0.007        1
+## 2 dplyr          100   0.028        4
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -679,8 +679,8 @@ conditions are supplied they are combined with ‘\&’.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   3.762    5.436
-## 2 dplyr          100   0.692    1.000
+## 1  base          100   7.977    5.364
+## 2 dplyr          100   1.487    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -739,8 +739,8 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   2.883    1.000
-## 2 dplyr          100   2.907    1.008
+## 1  base          100   5.958    1.000
+## 2 dplyr          100   5.979    1.004
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -826,8 +826,8 @@ inputs create multiple output summaries.  (Two spellings:
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100  36.749    53.96
-## 2 dplyr          100   0.681     1.00
+## 1  base          100  82.651    54.81
+## 2 dplyr          100   1.508     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -936,7 +936,7 @@ follow.
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets} 
   \framesubtitle{Data sets for examples:}
 \begin{knitrout}\footnotesize
@@ -961,7 +961,11 @@ follow.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  \pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -985,7 +989,11 @@ follow.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  \pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1017,7 +1025,7 @@ follow.
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt inner\_join}}
   Return all rows from x where there are matching values in y,
@@ -1042,7 +1050,11 @@ follow.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-\pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt inner\_join}}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1083,8 +1095,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   1.958    9.505
-## 2 dplyr          100   0.206    1.000
+## 1  base          100   4.305    8.768
+## 2 dplyr          100   0.491    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1148,8 +1160,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   2.174    3.345
-## 2 dplyr          100   0.650    1.000
+## 1  base          100   4.659    2.988
+## 2 dplyr          100   1.559    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1189,10 +1201,9 @@ follow.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt anti\_join}}
   Return all rows from x where there are not matching values in
@@ -1224,7 +1235,11 @@ follow.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-\pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt anti\_join}}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1281,13 +1296,13 @@ follow.
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt outer\_join}}
-  Return all rows from x and y, keeping all columns of x and y.
-
-  Not implemented in {\tt dplyr\_0.2}, will be implemented in {\tt dplyr\_0.3}.
-
+  \begin{itemize}
+    \item Return all rows from x and y, keeping all columns of x and y.
+    \item Not implemented in {\tt dplyr\_0.2}, will be implemented in {\tt dplyr\_0.3}.
+  \end{itemize}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1314,7 +1329,11 @@ follow.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-\pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1361,14 +1380,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base           10   64.55    3.389
-## 2 dplyr           10   19.05    1.000
+## 1  base           10  138.48    3.953
+## 2 dplyr           10   35.03    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
   \begin{itemize}
@@ -1398,7 +1417,11 @@ follow.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-  \pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1435,8 +1458,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base         1000   1.999    1.508
-## 2 dplyr         1000   1.326    1.000
+## 1  base         1000   4.908    1.644
+## 2 dplyr         1000   2.986    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1462,25 +1485,25 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old       new       
-## var1      0xbbd18a0 0x338247f0
+##           old        new      
+## var1      0x10d3c660 0x94764a8
 ## 
 ## Changed attributes:
 ##           old        new       
-## row.names 0x4f7f4b08 0x4f7f4e20
+## row.names 0x548836f0 0x548833d8
 \end{verbatim}
 \begin{alltt}
 \hlkwd{location}\hlstd{(this_df2)}
 \end{alltt}
 \begin{verbatim}
-## <0x64cb160>
+## <0x10988118>
 ## Variables:
-##  * var1:      <0x338247f0>
-##  * var2:      <0x449e3410>
+##  * var1:      <0x94764a8 >
+##  * var2:      <0x10d365b0>
 ## Attributes:
-##  * names:     <0x64cb208 >
-##  * row.names: <0x4f6ea938>
-##  * class:     <0xa0d3df8 >
+##  * names:     <0x109881c0>
+##  * row.names: <0x4dc1430 >
+##  * class:     <0x69a2c38 >
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1505,14 +1528,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old        new      
-## var1      0x125a59d0 0x83ae7e0
+##           old       new       
+## var1      0xb77dea8 0x1fa8d620
 ## 
 ## Changed attributes:
 ##           old        new       
-## names     0x24b6ce78 0x24b73b80
-## class     0xf87ef90  0x839aab8 
-## row.names 0xe9e57e0  0xe9ccda0
+## names     0xa70c070  0x972d510 
+## class     0x1f3e35e8 0x1fa79298
+## row.names 0x9cba5d8  0x9cba8f0
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1555,9 +1578,10 @@ follow.
   \end{itemize} 
 \end{frame} 
 
-\begin{frame}[allowframebreaks,fragile]
+\begin{frame}[fragile]
   \frametitle{Window Functions}
   \framesubtitle{Examples}
+  The following examples come from {\tt vignette("window-functions", "dplyr")}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1588,9 +1612,11 @@ follow.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1618,14 +1644,16 @@ follow.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# For each player, the proportion of years with more home runs than the prior}
-\hlcom{# year}
+\hlcom{#DRUG\}DRUG\} year}
 \hlstd{batting} \hlopt{%>%}
   \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
   \hlkwd{mutate}\hlstd{(}\hlkwc{more_hrs} \hlstd{= HR} \hlopt{>} \hlkwd{lag}\hlstd{(HR))} \hlopt{%>%}                 \hlcom{# Window function}
@@ -1649,9 +1677,11 @@ follow.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1679,9 +1709,11 @@ follow.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1788,16 +1820,13 @@ follow.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mu} \hlkwb{<-} \hlnum{1}
-\hlstd{sigma} \hlkwb{<-} \hlnum{4}
-\hlstd{N} \hlkwb{<-} \hlnum{5}
-\hlstd{y} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(N, mu, sigma)}
+\hlstd{mu} \hlkwb{<-} \hlnum{1}\hlstd{; sigma} \hlkwb{<-} \hlnum{4}\hlstd{; N} \hlkwb{<-} \hlnum{5}\hlstd{; y} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(N, mu, sigma)}
 
 \hlcom{# -2 log likelihood, standard nested operations, i.e, infix notation}
 \hlopt{-}\hlnum{2} \hlopt{*} \hlkwd{log}\hlstd{((}\hlnum{1}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{))}\hlopt{^}\hlstd{(N)} \hlopt{*} \hlkwd{exp}\hlstd{(}\hlopt{-}\hlnum{1}\hlopt{/}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{*} \hlkwd{sum}\hlstd{((y} \hlopt{-} \hlstd{mu)}\hlopt{^}\hlnum{2}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
-## [1] 25.48
+## [1] 29.03
 \end{verbatim}
 \begin{alltt}
 \hlcom{# -2 log likelihood, using forward-piping, somewhat like postfix notation}
@@ -1812,7 +1841,7 @@ follow.
 \hlkwd{multiply_by}\hlstd{(}\hlopt{-}\hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 25.48
+## [1] 29.03
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1855,12 +1884,12 @@ What do you think?  Pros and Cons?
 ## other attached packages:
 ## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1  
 ## [4] knitr_1.6        vimcom_0.9-93    setwidth_1.0-3  
-## [7] colorout_1.0-2  
+## [7] colorout_1.0-3  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4   
 ##  [4] evaluate_0.5.5  formatR_0.10    highr_0.3      
-##  [7] parallel_3.1.0  Rcpp_0.11.1     stringr_0.6.2  
+##  [7] parallel_3.1.0  Rcpp_0.11.2     stringr_0.6.2  
 ## [10] tools_3.1.0
 \end{verbatim}
 \end{kframe}

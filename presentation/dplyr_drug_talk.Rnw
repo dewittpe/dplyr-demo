@@ -522,23 +522,31 @@ person_df   <- Master   %>% tbl_df()
 @
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets} 
   \framesubtitle{Data sets for examples:}
 <<>>=
 print(batting_df,  n = 6)
 @
-  \pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
 <<>>=
 print(pitching_df, n = 6)
 @
-  \pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
 <<>>=
 print(person_df,   n = 6) 
 @
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt inner\_join}}
   Return all rows from x where there are matching values in y,
@@ -559,7 +567,11 @@ dplyr_inner <- person_df %>%
                filter(birthState == "CO") %>% 
                inner_join(x = ., pitching_df, by = "playerID") 
 @
-\pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt inner\_join}}
 <<>>= 
 dim(dplyr_inner)
 all.equal(base_inner, dplyr_inner)
@@ -650,11 +662,10 @@ dplyr_semi %>% dim()
 
 # the semi join returns a subset of the person_df data.frame 
 # which has at least one match in the pitching_df.
-@
-
+@ 
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt anti\_join}}
   Return all rows from x where there are not matching values in
@@ -666,7 +677,11 @@ dplyr_semi %>% summarise(n_distinct(playerID))
 # there are 83 - 54 = 29 players who have no pitching stats... 
 # Who are they?
 @
-\pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt anti\_join}}
 <<>>=
 dplyr_anti <- person_df %>% 
               filter(birthState == "CO") %>%
@@ -675,13 +690,13 @@ dplyr_anti
 @
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt outer\_join}}
-  Return all rows from x and y, keeping all columns of x and y.
-
-  Not implemented in {\tt dplyr\_0.2}, will be implemented in {\tt dplyr\_0.3}.
-
+  \begin{itemize}
+    \item Return all rows from x and y, keeping all columns of x and y.
+    \item Not implemented in {\tt dplyr\_0.2}, will be implemented in {\tt dplyr\_0.3}.
+  \end{itemize}
 <<>>=
 base_outer <- merge(batting_df, pitching_df, 
                     by = "playerID", all = TRUE,
@@ -704,7 +719,11 @@ my_outer_join <- function(dfx, dfy, suffixes = c(".x", ".y"), ...) {
   return(out)
 }
 @
-\pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
 <<>>=
 dplyr_outer <- my_outer_join(batting_df, pitching_df, 
                              c(".batting", ".pitching"), 
@@ -737,7 +756,7 @@ bnch %>% select(test, replications, elapsed, relative)
 @ 
 \end{frame} 
 
-\begin{frame}[allowframebreaks, fragile]
+\begin{frame}[fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
   \begin{itemize}
@@ -763,7 +782,11 @@ my_cross_join <- function(dfx, dfy) {
   return(out)
 }
 @
-  \pagebreak
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
 <<>>=
 dplyr_cross <- my_cross_join(dfx, dfy)
 
@@ -854,9 +877,10 @@ changes(this_df, this_df2)
   \end{itemize} 
 \end{frame} 
 
-\begin{frame}[allowframebreaks,fragile]
+\begin{frame}[fragile]
   \frametitle{Window Functions}
   \framesubtitle{Examples}
+  The following examples come from {\tt vignette("window-functions", "dplyr")}
 <<>>=
 batting <- Batting %>% tbl_df() %>% 
            select(playerID, yearID, teamID, G, AB:H, HR) 
@@ -865,39 +889,47 @@ batting <- Batting %>% tbl_df() %>%
 batting %>% 
   group_by(playerID) %>%
   filter(min_rank(desc(H)) <= 2 & H > 0)
-@
+@ 
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 <<>>=
 # Within each player, rank each year by the number of games played
 batting %>% 
   group_by(playerID) %>%
   mutate(G_rank = min_rank(G))
 @
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 <<>>=
 # For each player, the proportion of years with more home runs than the prior
-# year
+#DRUG}DRUG} year
 batting %>% 
   group_by(playerID) %>%
   mutate(more_hrs = HR > lag(HR)) %>%                 # Window function
   summarize(more_hrs = mean(more_hrs, na.rm = TRUE))  # aggregate function
 @
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 <<>>=
 # For each player, compute avg change in games played per year
 batting %>% 
   group_by(playerID) %>%
   mutate(G_change = (G - lag(G)) / (yearID - lag(yearID)))
 @
+\end{frame} 
 
-\pagebreak 
-
+\begin{frame}[fragile]
+  \frametitle{Window Functions}
+  \framesubtitle{Examples} 
 <<>>=
 # For each player, find all when they played more games than average
 batting %>% 
@@ -981,13 +1013,11 @@ batting %>%
   \framesubtitle{Examples} 
 
 <<"magrittr-examples">>=
-mu <- 1
-sigma <- 4
-N <- 5
-y <- rnorm(N, mu, sigma)
+mu <- 1; sigma <- 5; N <- 5; y <- rnorm(N, mu, sigma)
 
 # -2 log likelihood, standard nested operations, i.e, infix notation
--2 * log((1/sqrt(2 * pi * sigma^2))^(N) * exp(-1/(2 * sigma^2) * sum((y - mu)^2)))
+-2 * log((1/sqrt(2 * pi * sigma^2))^(N) * 
+         exp(-1/(2 * sigma^2) * sum((y - mu)^2)))
 
 # -2 log likelihood, using forward-piping, somewhat like postfix notation
 y %>% 
@@ -1000,7 +1030,6 @@ multiply_by((2 * pi * sigma^2)^(-N/2)) %>%
 log %>%
 multiply_by(-2)
 @
-What do you think?  Pros and Cons?
 
 \end{frame} 
 %}}}
