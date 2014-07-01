@@ -58,10 +58,22 @@ opts_chunk$set(fig.align = "center",
       dplyr}
     \item Illustrate the usefulness of the forward-piping operator which is
       part of {\tt dplyr} and extended further in {\tt magrittr}.  
+
+    \item {\tt dplyr} will save time in initial coding, debugging, code
+      maintenance, \ldots
   \end{itemize}
 
-  \tableofcontents
+  % \tableofcontents
 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Is it Worth the Time?}
+  \framesubtitle{\url{http://xkcd.com/1205/}}
+
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{../figure/is_it_worth_the_time} 
+  \end{center}
 \end{frame} 
 %}}}
 
@@ -134,16 +146,12 @@ clclss <- apply(data.frame(clclss.1, clclss.2, clclss.3), 1,
 
 # column classes are set (in R code not shown) to ensure
 # that each column of the imported data is of the same class
-wls.90.99 <- 
-  read.csv("../data/STRIKE_REPORTS (1990-1999).csv", 
-           colClasses = clclss)
-wls.00.09 <- 
-  read.csv("../data/STRIKE_REPORTS (2000-2009).csv", 
-           colClasses = clclss)
-wls.10.14 <- 
-  read.csv("../data/STRIKE_REPORTS (2010-Current).csv", 
-           colClasses = clclss)
-
+wls.90.99 <- read.csv("../data/STRIKE_REPORTS (1990-1999).csv", 
+                      colClasses = clclss)
+wls.00.09 <- read.csv("../data/STRIKE_REPORTS (2000-2009).csv", 
+                      colClasses = clclss)
+wls.10.14 <- read.csv("../data/STRIKE_REPORTS (2010-Current).csv", 
+                      colClasses = clclss) 
 @
 \end{frame} 
 
@@ -151,13 +159,10 @@ wls.10.14 <-
 \begin{frame}[fragile]
   \frametitle{Data Import}
 <<"rbind", cache = TRUE, dependson="data-read">>=
-# Base does not require the columns to be of the same class,
-# only the same name
-# dplyr requires that the columnns are of the same class.
 dim(wls.90.99)
 nrow(wls.90.99) + nrow(wls.00.09) + nrow(wls.10.14) 
 bnchmrk <- 
-  benchmark(base = rbind(wls.90.99, wls.00.09, wls.10.14), 
+  benchmark(base  = rbind(wls.90.99, wls.00.09, wls.10.14), 
             dplyr = rbind_list(wls.90.99, wls.00.09, wls.10.14),
             replications = 100)
 bnchmrk[, c("test", "replications", "elapsed", "relative")]
@@ -247,7 +252,9 @@ select(bnch, test, replications, elapsed, relative)
 @
 
 Selection of columns might be slower in dplyr, but, there are some
-tools to help speed up the coding, and maintenance.
+tools to help speed up the coding, and maintenance.  {\tt select} will be very
+helpful when chaining together many operations or when using \emph{super cool
+helper functions}.
 \end{frame} 
 
 
@@ -299,6 +306,8 @@ select(wls_tbl_df, contains("ENG"))
   What about dropping variables?
 <<>>=
 print(wls_yr, n = 2)
+
+# omit AIRPORT and any column with a name starting with ENG.
 print(select(wls_yr, -AIRPORT, -starts_with("ENG")), n = 3)
 @ 
 \end{frame} 
@@ -323,6 +332,9 @@ arrange(dat, var2)
 arrange(dat, var2, var1)
 # this would be very helpful for collecting data by a
 # subject id, visit number, ...
+#
+# Very helpful for geepack::geeglm() where the data *must* 
+# be sorted by cluster and in temporal order as well.
 @
 \end{frame} 
 %}}}
@@ -410,8 +422,6 @@ summarise(wls_yr,
   \frametitle{{\tt group\_by}}
 <<>>=
 summarise(group_by(wls_yr, ENG_1_POS), 
-          "Mean speed" = mean(SPEED, na.rm = TRUE),
-          "SD speed"   = sd(SPEED, na.rm = TRUE), 
           "Mean speed" = mean(SPEED, na.rm = TRUE),
           "SD speed"   = sd(SPEED, na.rm = TRUE), 
           n            = sum(!is.na(SPEED)),
@@ -510,17 +520,23 @@ person_df   <- Master   %>% tbl_df()
 @
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets} 
   \framesubtitle{Data sets for examples:}
 <<>>=
-print(batting_df,  n = 3)
-print(pitching_df, n = 3)
-print(person_df,   n = 3) 
+print(batting_df,  n = 6)
+@
+  \pagebreak
+<<>>=
+print(pitching_df, n = 6)
+@
+  \pagebreak
+<<>>=
+print(person_df,   n = 6) 
 @
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt inner\_join}}
   Return all rows from x where there are matching values in y,
@@ -529,8 +545,10 @@ print(person_df,   n = 3)
 
 <<>>=
 # build a data.frame for the pitching stats of players born in Colorado
-base_inner <- merge(subset(person_df, birthState == "CO"), 
-                    pitching_df, 
+base_inner <- person_df %>% 
+              subset(birthState == "CO") %>% 
+              merge(x = ., 
+                    y = pitching_df, 
                     by = "playerID", 
                     all = FALSE) %>% 
               tbl_df() 
@@ -538,9 +556,11 @@ base_inner <- merge(subset(person_df, birthState == "CO"),
 dplyr_inner <- person_df %>% 
                filter(birthState == "CO") %>% 
                inner_join(x = ., pitching_df, by = "playerID") 
-
-all.equal(base_inner, dplyr_inner)
+@
+\pagebreak
+<<>>= 
 dim(dplyr_inner)
+all.equal(base_inner, dplyr_inner)
 @
 \end{frame}
 
@@ -550,8 +570,10 @@ dim(dplyr_inner)
   \framesubtitle{{\tt inner\_join}}
 <<>>=
 bnch <- 
-  benchmark(base = merge(subset(person_df, birthState == "CO"), 
-                         pitching_df, 
+  benchmark(base = person_df %>% 
+                   subset(birthState == "CO") %>% 
+                   merge(x = ., 
+                         y = pitching_df, 
                          by = "playerID", 
                          all = FALSE),
             dplyr = person_df %>% 
@@ -570,8 +592,10 @@ bnch %>% select(test, replications, elapsed, relative)
   matches are returned.
 
 <<>>=
-base_left <- merge(subset(person_df, birthState == "CO"),
-                   pitching_df, 
+base_left <- person_df %>% 
+             subset(birthState == "CO") %>% 
+             merge(x = ., 
+                   y = pitching_df, 
                    by = "playerID", 
                    all.x = TRUE) %>%
              tbl_df()
@@ -590,8 +614,10 @@ dim(dplyr_left)
   \framesubtitle{{\tt left\_join}}
 <<>>=
 bnch <- 
-  benchmark(base = merge(subset(person_df, birthState == "CO"), 
-                         pitching_df, 
+  benchmark(base = person_df %>% 
+                   subset(birthState == "CO") %>% 
+                   merge(x = ., 
+                         y = pitching_df, 
                          by = "playerID", 
                          all.x = TRUE),
             dplyr = person_df %>% 
@@ -613,7 +639,8 @@ bnch %>% select(test, replications, elapsed, relative)
   join will never duplicate rows of ‘x’.
 
 <<>>=
-dplyr_semi <- person_df %>% filter(birthState == "CO") %>% 
+dplyr_semi <- person_df %>% 
+              filter(birthState == "CO") %>% 
               semi_join(pitching_df, 
                         by = "playerID")
 dplyr_inner %>% dim()
@@ -625,7 +652,7 @@ dplyr_semi %>% dim()
 
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt anti\_join}}
   Return all rows from x where there are not matching values in
@@ -634,15 +661,19 @@ dplyr_semi %>% dim()
 <<>>=
 dplyr_left %>% summarise(n_distinct(playerID))
 dplyr_semi %>% summarise(n_distinct(playerID))
-# there are 83 - 54 = 29 players who have no pitching stats... who are they?
-
-dplyr_anti <- person_df %>% filter(birthState == "CO") %>%
+# there are 83 - 54 = 29 players who have no pitching stats... 
+# Who are they?
+@
+\pagebreak
+<<>>=
+dplyr_anti <- person_df %>% 
+              filter(birthState == "CO") %>%
               anti_join(pitching_df, by = "playerID")
 dplyr_anti
 @
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt outer\_join}}
   Return all rows from x and y, keeping all columns of x and y.
@@ -670,7 +701,9 @@ my_outer_join <- function(dfx, dfy, suffixes = c(".x", ".y"), ...) {
   out <- dplyr::union(d1, d2)
   return(out)
 }
-
+@
+\pagebreak
+<<>>=
 dplyr_outer <- my_outer_join(batting_df, pitching_df, 
                              c(".batting", ".pitching"), 
                              by = "playerID")
@@ -702,7 +735,7 @@ bnch %>% select(test, replications, elapsed, relative)
 @ 
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
   \begin{itemize}
@@ -727,7 +760,9 @@ my_cross_join <- function(dfx, dfy) {
   out <- inner_join(dfx2, dfy2, by = "special.id") %>% select(-special.id)
   return(out)
 }
-
+@
+  \pagebreak
+<<>>=
 dplyr_cross <- my_cross_join(dfx, dfy)
 
 all.equal(base_cross, dplyr_cross)
@@ -806,18 +841,18 @@ changes(this_df, this_df2)
   \begin{itemize}
     \item See {\tt vignette("window-functions", package = "dplyr")}
 
-    \item window functions are variations of aggreation functions.
+    \item window functions are variations of aggregation functions.
 
       \begin{itemize}
         \item Aggregation functions such as {\tt sum()} and {\tt median()} are
           maps between $\mathbb{R}^n \rightarrow \mathbb{R}^1$.
-        \item Window function are maps between $\mathbb{R}^n \rightarrow \mathbb{R}^n$.
+        \item Window function are maps between $\mathbb{R}^n \rightarrow \mathbb{R}^n.$
           Examples: {\tt cumsum()}, {\tt rank()}, {\tt lag()}
       \end{itemize} 
   \end{itemize} 
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks,fragile]
   \frametitle{Window Functions}
   \framesubtitle{Examples}
 <<>>=
@@ -828,24 +863,40 @@ batting <- Batting %>% tbl_df() %>%
 batting %>% 
   group_by(playerID) %>%
   filter(min_rank(desc(H)) <= 2 & H > 0)
+@
 
+\pagebreak 
+
+<<>>=
 # Within each player, rank each year by the number of games played
 batting %>% 
   group_by(playerID) %>%
   mutate(G_rank = min_rank(G))
+@
 
+\pagebreak 
+
+<<>>=
 # For each player, the proportion of years with more home runs than the prior
 # year
 batting %>% 
   group_by(playerID) %>%
   mutate(more_hrs = HR > lag(HR)) %>%                 # Window function
   summarize(more_hrs = mean(more_hrs, na.rm = TRUE))  # aggregate function
+@
 
+\pagebreak 
+
+<<>>=
 # For each player, compute avg change in games played per year
 batting %>% 
   group_by(playerID) %>%
   mutate(G_change = (G - lag(G)) / (yearID - lag(yearID)))
+@
 
+\pagebreak 
+
+<<>>=
 # For each player, find all when they played more games than average
 batting %>% 
   group_by(playerID) %>%
@@ -953,6 +1004,19 @@ What do you think?  Pros and Cons?
 %}}}
 
 \section{Wrap Up}%{{{
+
+\begin{frame}[fragile]
+  \frametitle{Other resources}
+  \begin{itemize}
+    \item Wickham's presentation at useR!2014: Data manipulation with dplyr,
+      \url{http://blog.revolutionanalytics.com/2014/06/user-2014-is-underway.html}
+
+    \item R Meetup - Hadley Wickham and Joe Cheng of RStudio return to BARUG.
+      \url{http://www.youtube.com/watch?v=qRSfxSRdL5Y}
+
+  \end{itemize}
+\end{frame} 
+
 \begin{frame}[fragile]
   \frametitle{Reproducibility}
   The data, code, sides, etc.\ all at \url{github.com/dewittpe/dplyr-demo}
@@ -963,7 +1027,7 @@ print(sessionInfo(), locale = FALSE)
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{DRUG}
+  \frametitle{Denver R User Group Notes}
   \begin{itemize}
     \item Future MeeetUp Topics:
       \begin{itemize}

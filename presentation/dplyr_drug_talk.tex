@@ -87,10 +87,22 @@
       dplyr}
     \item Illustrate the usefulness of the forward-piping operator which is
       part of {\tt dplyr} and extended further in {\tt magrittr}.  
+
+    \item {\tt dplyr} will save time in initial coding, debugging, code
+      maintenance, \ldots
   \end{itemize}
 
-  \tableofcontents
+  % \tableofcontents
 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{Is it Worth the Time?}
+  \framesubtitle{\url{http://xkcd.com/1205/}}
+
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{../figure/is_it_worth_the_time} 
+  \end{center}
 \end{frame} 
 %}}}
 
@@ -145,15 +157,12 @@
 
 \hlcom{# column classes are set (in R code not shown) to ensure}
 \hlcom{# that each column of the imported data is of the same class}
-\hlstd{wls.90.99} \hlkwb{<-}
-  \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (1990-1999).csv"}\hlstd{,}
-           \hlkwc{colClasses} \hlstd{= clclss)}
-\hlstd{wls.00.09} \hlkwb{<-}
-  \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (2000-2009).csv"}\hlstd{,}
-           \hlkwc{colClasses} \hlstd{= clclss)}
-\hlstd{wls.10.14} \hlkwb{<-}
-  \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (2010-Current).csv"}\hlstd{,}
-           \hlkwc{colClasses} \hlstd{= clclss)}
+\hlstd{wls.90.99} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (1990-1999).csv"}\hlstd{,}
+                      \hlkwc{colClasses} \hlstd{= clclss)}
+\hlstd{wls.00.09} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (2000-2009).csv"}\hlstd{,}
+                      \hlkwc{colClasses} \hlstd{= clclss)}
+\hlstd{wls.10.14} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"../data/STRIKE_REPORTS (2010-Current).csv"}\hlstd{,}
+                      \hlkwc{colClasses} \hlstd{= clclss)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -165,9 +174,6 @@
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# Base does not require the columns to be of the same class,}
-\hlcom{# only the same name}
-\hlcom{# dplyr requires that the columnns are of the same class.}
 \hlkwd{dim}\hlstd{(wls.90.99)}
 \end{alltt}
 \begin{verbatim}
@@ -181,15 +187,15 @@
 \end{verbatim}
 \begin{alltt}
 \hlstd{bnchmrk} \hlkwb{<-}
-  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{rbind}\hlstd{(wls.90.99, wls.00.09, wls.10.14),}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base}  \hlstd{=} \hlkwd{rbind}\hlstd{(wls.90.99, wls.00.09, wls.10.14),}
             \hlkwc{dplyr} \hlstd{=} \hlkwd{rbind_list}\hlstd{(wls.90.99, wls.00.09, wls.10.14),}
             \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
 \hlstd{bnchmrk[,} \hlkwd{c}\hlstd{(}\hlstr{"test"}\hlstd{,} \hlstr{"replications"}\hlstd{,} \hlstr{"elapsed"}\hlstd{,} \hlstr{"relative"}\hlstd{)]}
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100  110.74    4.762
-## 2 dplyr          100   23.25    1.000
+## 1  base          100   95.38    4.034
+## 2 dplyr          100   23.64    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -236,10 +242,7 @@
 \begin{alltt}
 \hlcom{# print(wls_df)  # takes a long time, not helpful}
 \hlcom{# head(wls_df)   # two many columns to be useful}
-
-\hlcom{# print.tbl_df looks bad on this slide but much better in console}
-\hlcom{# other examples will be better, I promise.}
-\hlkwd{print}\hlstd{(wls_tbl_df,} \hlkwc{n} \hlstd{=} \hlnum{2}\hlstd{)}
+\hlkwd{print}\hlstd{(wls_tbl_df,} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [142,911 x 94]
@@ -247,6 +250,7 @@
 ##    INDEX_NR OPID          OPERATOR     ATYPE AMA AMO EMA EMO
 ## 1    100000  AAL AMERICAN AIRLINES     B-727 148  10  34  10
 ## 2    100001  UAL   UNITED AIRLINES B-737-300 148  24  10  01
+## 3    100002  UAL   UNITED AIRLINES B-737-300 148  24  10  01
 ## ..      ...  ...               ...       ... ... ... ... ...
 ## Variables not shown: AC_CLASS (chr), AC_MASS (int), NUM_ENGS
 ##   (chr), TYPE_ENG (chr), ENG_1_POS (chr), ENG_2_POS (int),
@@ -338,7 +342,7 @@
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# relative speed }
+\hlcom{# relative speed betwwen dplyr and base R}
 \hlstd{bnch} \hlkwb{<-}
   \hlkwd{benchmark}\hlstd{(}\hlkwc{base}  \hlstd{= wls_tbl_df[,} \hlkwd{c}\hlstd{(}\hlstr{"INCIDENT_YEAR"}\hlstd{,} \hlstr{"AIRPORT"}\hlstd{,}
                                    \hlstr{"ENG_1_POS"}\hlstd{,} \hlstr{"ENG_2_POS"}\hlstd{,}
@@ -360,8 +364,10 @@
 \end{kframe}
 \end{knitrout}
 
-Selection of columns might be slower, but, there are some
-tools to help speed up the coding, and maintenance.
+Selection of columns might be slower in dplyr, but, there are some
+tools to help speed up the coding, and maintenance.  {\tt select} will be very
+helpful when chaining together many operations or when using \emph{super cool
+helper functions}.
 \end{frame} 
 
 
@@ -540,6 +546,7 @@ tools to help speed up the coding, and maintenance.
 ##   DAM_ENG2 (lgl), HEIGHT (int), DISTANCE (dbl), SPEED (int)
 \end{verbatim}
 \begin{alltt}
+\hlcom{# omit AIRPORT and any column with a name starting with ENG.}
 \hlkwd{print}\hlstd{(}\hlkwd{select}\hlstd{(wls_yr,} \hlopt{-}\hlstd{AIRPORT,} \hlopt{-}\hlkwd{starts_with}\hlstd{(}\hlstr{"ENG"}\hlstd{)),} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
@@ -575,10 +582,6 @@ arrange: reorder the rows. Multiple inputs are ordered from left-to-right.
 ## 3    2    A
 ## 4    1    B
 \end{verbatim}
-\begin{alltt}
-\hlcom{# this would be very helpful for collecting data by a}
-\hlcom{# subject id, visit number, ...}
-\end{alltt}
 \end{kframe}
 \end{knitrout}
 \end{frame} 
@@ -610,6 +613,9 @@ arrange: reorder the rows. Multiple inputs are ordered from left-to-right.
 \begin{alltt}
 \hlcom{# this would be very helpful for collecting data by a}
 \hlcom{# subject id, visit number, ...}
+\hlcom{#}
+\hlcom{# Very helpful for geepack::geeglm() where the data *must* }
+\hlcom{# be sorted by cluster and in temporal order as well.}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -656,19 +662,23 @@ conditions are supplied they are combined with ‘\&’.
 
 \begin{frame}[fragile]
   \frametitle{{\tt filter}}
+
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlcom{# How does dplyr::filter compare to base::subset?}
 \hlstd{bnch} \hlkwb{<-}
-  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{subset}\hlstd{(wls_yr, INCIDENT_YEAR} \hlopt{>} \hlnum{2000} \hlopt{&} \hlstd{INCIDENT_YEAR} \hlopt{<=} \hlnum{2005}\hlstd{),}
-            \hlkwc{dplyr} \hlstd{=} \hlkwd{filter}\hlstd{(wls_yr, INCIDENT_YEAR} \hlopt{>} \hlnum{2000}\hlstd{, INCIDENT_YEAR} \hlopt{<=} \hlnum{2005}\hlstd{),}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{subset}\hlstd{(wls_yr,}
+                          \hlstd{INCIDENT_YEAR} \hlopt{>} \hlnum{2000} \hlopt{&} \hlstd{INCIDENT_YEAR} \hlopt{<=} \hlnum{2005}\hlstd{),}
+            \hlkwc{dplyr} \hlstd{=} \hlkwd{filter}\hlstd{(wls_yr,}
+                           \hlstd{INCIDENT_YEAR} \hlopt{>} \hlnum{2000}\hlstd{, INCIDENT_YEAR} \hlopt{<=} \hlnum{2005}\hlstd{),}
             \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
 \hlkwd{select}\hlstd{(bnch, test, replications, elapsed, relative)}
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   7.968     5.38
-## 2 dplyr          100   1.481     1.00
+## 1  base          100   7.889    5.374
+## 2 dplyr          100   1.468    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -712,6 +722,7 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlcom{# dplyr::mutate is conceptually similar to base::within}
 \hlstd{bnch} \hlkwb{<-}
 \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{within}\hlstd{(wls_yr, \{}
                         \hlstd{SPEED_MPH} \hlkwb{=} \hlstd{SPEED} \hlopt{*} \hlnum{1.15078}
@@ -726,8 +737,8 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   5.830    1.019
-## 2 dplyr          100   5.722    1.000
+## 1  base          100   5.593        1
+## 2 dplyr          100   5.594        1
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -746,13 +757,15 @@ inputs create multiple output summaries.  (Two spellings:
 \hlkwd{summarise}\hlstd{(wls_yr,}
           \hlstr{"Mean speed"} \hlstd{=} \hlkwd{mean}\hlstd{(SPEED,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{),}
           \hlstr{"SD speed"}   \hlstd{=} \hlkwd{sd}\hlstd{(SPEED,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-          \hlkwc{n}            \hlstd{=} \hlkwd{sum}\hlstd{(}\hlopt{!}\hlkwd{is.na}\hlstd{(SPEED)))}
+          \hlkwc{n}            \hlstd{=} \hlkwd{sum}\hlstd{(}\hlopt{!}\hlkwd{is.na}\hlstd{(SPEED)),}
+          \hlkwc{records}      \hlstd{=} \hlkwd{n}\hlstd{(),}
+          \hlkwc{airports}     \hlstd{=} \hlkwd{n_distinct}\hlstd{(AIRPORT))}
 \end{alltt}
 \begin{verbatim}
-## Source: local data frame [1 x 3]
+## Source: local data frame [1 x 5]
 ## 
-##   Mean speed SD speed     n
-## 1      141.3    46.09 58938
+##   Mean speed SD speed     n records airports
+## 1      141.3    46.09 58938  142911     2093
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -768,23 +781,25 @@ inputs create multiple output summaries.  (Two spellings:
 \hlkwd{summarise}\hlstd{(}\hlkwd{group_by}\hlstd{(wls_yr, ENG_1_POS),}
           \hlstr{"Mean speed"} \hlstd{=} \hlkwd{mean}\hlstd{(SPEED,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{),}
           \hlstr{"SD speed"}   \hlstd{=} \hlkwd{sd}\hlstd{(SPEED,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-          \hlkwc{n}            \hlstd{=} \hlkwd{sum}\hlstd{(}\hlopt{!}\hlkwd{is.na}\hlstd{(SPEED)))}
+          \hlkwc{n}            \hlstd{=} \hlkwd{sum}\hlstd{(}\hlopt{!}\hlkwd{is.na}\hlstd{(SPEED)),}
+          \hlkwc{records}      \hlstd{=} \hlkwd{n}\hlstd{(),}
+          \hlkwc{airports}     \hlstd{=} \hlkwd{n_distinct}\hlstd{(AIRPORT))}
 \end{alltt}
 \begin{verbatim}
-## Source: local data frame [11 x 4]
+## Source: local data frame [11 x 6]
 ## 
-##    ENG_1_POS Mean speed SD speed     n
-## 1                113.20    40.40  1303
-## 2          1     154.81    43.14 27634
-## 3          2      62.00    43.39     4
-## 4          3     108.32    33.48    31
-## 5          4     123.90    41.74  7953
-## 6          5     143.80    42.31 17701
-## 7          6      99.06    36.67   482
-## 8          7      83.91    29.34  3829
-## 9          A      90.00       NA     1
-## 10         C        NaN       NA     0
-## 11         T        NaN       NA     0
+##    ENG_1_POS Mean speed SD speed     n records airports
+## 1                113.20    40.40  1303   34269      742
+## 2          1     154.81    43.14 27634   56104      565
+## 3          2      62.00    43.39     4       6        6
+## 4          3     108.32    33.48    31      59       45
+## 5          4     123.90    41.74  7953   13116     1028
+## 6          5     143.80    42.31 17701   33165      896
+## 7          6      99.06    36.67   482     620      109
+## 8          7      83.91    29.34  3829    5569     1186
+## 9          A      90.00       NA     1       1        1
+## 10         C        NaN       NA     0       1        1
+## 11         T        NaN       NA     0       1        1
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -814,6 +829,7 @@ inputs create multiple output summaries.  (Two spellings:
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+  {\tt dplyr::summarise} is much faster than {\tt stats::aggregate}.
 \end{frame} 
 %}}}
 
@@ -913,7 +929,18 @@ follow.
 \hlstd{batting_df}  \hlkwb{<-} \hlstd{Batting}  \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
 \hlstd{pitching_df} \hlkwb{<-} \hlstd{Pitching} \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
 \hlstd{person_df}   \hlkwb{<-} \hlstd{Master}   \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()}
-\hlkwd{print}\hlstd{(batting_df,}  \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{joining data sets} 
+  \framesubtitle{Data sets for examples:}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{print}\hlstd{(batting_df,}  \hlkwc{n} \hlstd{=} \hlnum{6}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [96,600 x 24]
@@ -922,13 +949,21 @@ follow.
 ## 1  aardsda01   2004     1    SFN   NL 11        11  0 0 0   0
 ## 2  aardsda01   2006     1    CHN   NL 45        43  2 0 0   0
 ## 3  aardsda01   2007     1    CHA   AL 25         2  0 0 0   0
+## 4  aardsda01   2008     1    BOS   AL 47         5  1 0 0   0
+## 5  aardsda01   2009     1    SEA   AL 73         3  0 0 0   0
+## 6  aardsda01   2010     1    SEA   AL 53         4  0 0 0   0
 ## ..       ...    ...   ...    ...  ... ..       ... .. . . ...
 ## Variables not shown: X3B (int), HR (int), RBI (int), SB
 ##   (int), CS (int), BB (int), SO (int), IBB (int), HBP (int),
 ##   SH (int), SF (int), GIDP (int), G_old (int)
 \end{verbatim}
+\end{kframe}
+\end{knitrout}
+  \pagebreak
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{print}\hlstd{(pitching_df,} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
+\hlkwd{print}\hlstd{(pitching_df,} \hlkwc{n} \hlstd{=} \hlnum{6}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [41,857 x 30]
@@ -937,14 +972,22 @@ follow.
 ## 1  aardsda01   2004     1    SFN   NL 1 0 11  0  0   0  0
 ## 2  aardsda01   2006     1    CHN   NL 3 0 45  0  0   0  0
 ## 3  aardsda01   2007     1    CHA   AL 2 1 25  0  0   0  0
+## 4  aardsda01   2008     1    BOS   AL 4 2 47  0  0   0  0
+## 5  aardsda01   2009     1    SEA   AL 3 6 73  0  0   0 38
+## 6  aardsda01   2010     1    SEA   AL 0 6 53  0  0   0 31
 ## ..       ...    ...   ...    ...  ... . . .. .. .. ... ..
 ## Variables not shown: IPouts (int), H (int), ER (int), HR
 ##   (int), BB (int), SO (int), BAOpp (dbl), ERA (dbl), IBB
 ##   (int), WP (int), HBP (int), BK (int), BFP (int), GF (int),
 ##   R (int), SH (lgl), SF (lgl), GIDP (lgl)
 \end{verbatim}
+\end{kframe}
+\end{knitrout}
+  \pagebreak
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{print}\hlstd{(person_df,}   \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
+\hlkwd{print}\hlstd{(person_df,}   \hlkwc{n} \hlstd{=} \hlnum{6}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## Source: local data frame [18,125 x 35]
@@ -953,6 +996,9 @@ follow.
 ## 1         1 aaronha01        NA aaronha01h      1934
 ## 2         2 aaronto01        NA         NA      1939
 ## 3         3  aasedo01        NA         NA      1954
+## 4         4  abadan01        NA         NA      1972
+## 5         5 abadijo01        NA         NA      1854
+## 6         6 abbated01        NA         NA      1877
 ## ..      ...       ...       ...        ...       ...
 ## Variables not shown: birthMonth (int), birthDay (int),
 ##   birthCountry (chr), birthState (chr), birthCity (chr),
@@ -969,7 +1015,7 @@ follow.
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt inner\_join}}
   Return all rows from x where there are matching values in y,
@@ -980,20 +1026,10 @@ follow.
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# build a data.frame for the pitching stats of players born in Colorado}
-\hlstd{person_df} \hlopt{%>%}
-\hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
-\hlkwd{select}\hlstd{(playerID)} \hlopt{%>%}
-\hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}        \hlcom{# n_distinct is a fast length(unique())}
-\end{alltt}
-\begin{verbatim}
-## Source: local data frame [1 x 1]
-## 
-##   n_distinct(playerID)
-## 1                   83
-\end{verbatim}
-\begin{alltt}
-\hlstd{base_inner} \hlkwb{<-} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
-                    \hlstd{pitching_df,}
+\hlstd{base_inner} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
+              \hlkwd{subset}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+              \hlkwd{merge}\hlstd{(}\hlkwc{x} \hlstd{= .,}
+                    \hlkwc{y} \hlstd{= pitching_df,}
                     \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
                     \hlkwc{all} \hlstd{=} \hlnum{FALSE}\hlstd{)} \hlopt{%>%}
               \hlkwd{tbl_df}\hlstd{()}
@@ -1001,14 +1037,17 @@ follow.
 \hlstd{dplyr_inner} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
                \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
                \hlkwd{inner_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
-
-\hlstd{dplyr_inner} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\pagebreak}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(dplyr_inner)}
 \end{alltt}
 \begin{verbatim}
-## Source: local data frame [1 x 1]
-## 
-##   n_distinct(playerID)
-## 1                   54
+## [1] 297  64
 \end{verbatim}
 \begin{alltt}
 \hlkwd{all.equal}\hlstd{(base_inner, dplyr_inner)}
@@ -1028,18 +1067,21 @@ follow.
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{bnch} \hlkwb{<-}
-  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
-                         \hlstd{pitching_df,}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{= person_df} \hlopt{%>%}
+                   \hlkwd{subset}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+                   \hlkwd{merge}\hlstd{(}\hlkwc{x} \hlstd{= .,}
+                         \hlkwc{y} \hlstd{= pitching_df,}
                          \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
                          \hlkwc{all} \hlstd{=} \hlnum{FALSE}\hlstd{),}
-            \hlkwc{dplyr} \hlstd{= person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+            \hlkwc{dplyr} \hlstd{= person_df} \hlopt{%>%}
+                    \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
                     \hlkwd{inner_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{),}
             \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
 \hlstd{bnch} \hlopt{%>%} \hlkwd{select}\hlstd{(test, replications, elapsed, relative)}
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   4.331    8.492
+## 1  base          100   4.568    8.957
 ## 2 dplyr          100   0.510    1.000
 \end{verbatim}
 \end{kframe}
@@ -1056,8 +1098,10 @@ follow.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{base_left} \hlkwb{<-} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
-                   \hlstd{pitching_df,}
+\hlstd{base_left} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
+             \hlkwd{subset}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+             \hlkwd{merge}\hlstd{(}\hlkwc{x} \hlstd{= .,}
+                   \hlkwc{y} \hlstd{= pitching_df,}
                    \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
                    \hlkwc{all.x} \hlstd{=} \hlnum{TRUE}\hlstd{)} \hlopt{%>%}
              \hlkwd{tbl_df}\hlstd{()}
@@ -1066,19 +1110,16 @@ follow.
               \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
               \hlkwd{left_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
 
-\hlstd{dplyr_left} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwd{n_distinct}\hlstd{(playerID))}
-\end{alltt}
-\begin{verbatim}
-## Source: local data frame [1 x 1]
-## 
-##   n_distinct(playerID)
-## 1                   83
-\end{verbatim}
-\begin{alltt}
 \hlkwd{all.equal}\hlstd{(base_left, dplyr_left)}
 \end{alltt}
 \begin{verbatim}
 ## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(dplyr_left)}
+\end{alltt}
+\begin{verbatim}
+## [1] 326  64
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1091,19 +1132,22 @@ follow.
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{bnch} \hlkwb{<-}
-  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{merge}\hlstd{(}\hlkwd{subset}\hlstd{(person_df, birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
-                         \hlstd{pitching_df,}
+  \hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{= person_df} \hlopt{%>%}
+                   \hlkwd{subset}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+                   \hlkwd{merge}\hlstd{(}\hlkwc{x} \hlstd{= .,}
+                         \hlkwc{y} \hlstd{= pitching_df,}
                          \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,}
                          \hlkwc{all.x} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-            \hlkwc{dplyr} \hlstd{= person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+            \hlkwc{dplyr} \hlstd{= person_df} \hlopt{%>%}
+                    \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
                     \hlkwd{left_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{),}
             \hlkwc{replications} \hlstd{=} \hlnum{100}\hlstd{)}
 \hlstd{bnch} \hlopt{%>%} \hlkwd{select}\hlstd{(test, replications, elapsed, relative)}
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   4.649    3.135
-## 2 dplyr          100   1.483    1.000
+## 1  base          100   5.406    3.096
+## 2 dplyr          100   1.746    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1122,8 +1166,9 @@ follow.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{dplyr_semi} \hlkwb{<-} \hlkwd{semi_join}\hlstd{(person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
-                        \hlstd{pitching_df,}
+\hlstd{dplyr_semi} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
+              \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+              \hlkwd{semi_join}\hlstd{(pitching_df,}
                         \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
 \hlstd{dplyr_inner} \hlopt{%>%} \hlkwd{dim}\hlstd{()}
 \end{alltt}
@@ -1137,15 +1182,15 @@ follow.
 ## [1] 54 35
 \end{verbatim}
 \begin{alltt}
-\hlcom{# the semi join returns a subset of the person_df data.frame which has at least}
-\hlcom{# one match in the pitching_df.}
+\hlcom{# the semi join returns a subset of the person_df data.frame }
+\hlcom{# which has at least one match in the pitching_df.}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt anti\_join}}
   Return all rows from x where there are not matching values in
@@ -1172,26 +1217,74 @@ follow.
 ## 1                   54
 \end{verbatim}
 \begin{alltt}
-\hlcom{# there are 83 - 54 = 29 players who have no pitching stats... who are they?}
-
-\hlstd{dplyr_anti} \hlkwb{<-} \hlkwd{anti_join}\hlstd{(person_df} \hlopt{%>%} \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{),}
-                        \hlstd{pitching_df,}
-                        \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
-\hlstd{dplyr_anti} \hlopt{%>%} \hlkwd{dim}\hlstd{()}
+\hlcom{# there are 83 - 54 = 29 players who have no pitching stats... }
+\hlcom{# Who are they?}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\pagebreak
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dplyr_anti} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
+              \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
+              \hlkwd{anti_join}\hlstd{(pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+\hlstd{dplyr_anti}
 \end{alltt}
 \begin{verbatim}
-## [1] 29 35
+## Source: local data frame [29 x 35]
+## 
+##    lahmanID  playerID  managerID      hofID birthYear
+## 1     18178 headlch01         NA         NA      1984
+## 2     15005 welshji01         NA         NA      1902
+## 3     13711 straijo01         NA         NA      1954
+## 4     13595 stenhmi01         NA         NA      1958
+## 5     13556 stearjo01         NA stearjo01h      1951
+## 6     12360  ryanbu01         NA         NA      1885
+## 7     12326 runneto01 runneto01m         NA      1955
+## 8     12043 roberda02         NA         NA      1936
+## 9     11592 radtkja01         NA         NA      1913
+## 10    10411 niehobe01         NA         NA      1884
+## 11    10226 myattge01 myattge01m         NA      1914
+## 12    10155 murphbu01         NA         NA      1895
+## 13    10069 moutoja01         NA         NA      1968
+## 14     9572  metzle01         NA         NA      1899
+## 15     9402 mcnambo01         NA         NA      1916
+## 16     8264  lindja01         NA         NA      1946
+## 17     8088   leedu01         NA         NA      1899
+## 18     7110 jonesco02         NA         NA      1907
+## 19     7041 johnsma02         NA         NA      1975
+## 20     6049 heathto01         NA         NA      1913
+## 21     5946 hartzro01         NA         NA      1881
+## 22     5470 grempbu01         NA         NA      1919
+## 23     4690 fredejo01         NA         NA      1902
+## 24     3329 davisik01         NA         NA      1895
+## 25     2905 cottich01 cottich01m         NA      1936
+## 26     2104 caprani01         NA         NA      1958
+## 27     1440 bradlja01         NA         NA      1893
+## 28     3434 deideji01         NA         NA      1949
+## 29       54 adamsbu01         NA         NA      1915
+## Variables not shown: birthMonth (int), birthDay (int),
+##   birthCountry (chr), birthState (chr), birthCity (chr),
+##   deathYear (int), deathMonth (int), deathDay (int),
+##   deathCountry (chr), deathState (chr), deathCity (chr),
+##   nameFirst (chr), nameLast (chr), nameNote (chr), nameGiven
+##   (chr), nameNick (chr), weight (int), height (int), bats
+##   (fctr), throws (fctr), debut (date), finalGame (date),
+##   college (chr), lahman40ID (chr), lahman45ID (chr), retroID
+##   (chr), holtzID (chr), bbrefID (chr), deathDate (date),
+##   birthDate (date)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt outer\_join}}
   Return all rows from x and y, keeping all columns of x and y.
 
-  Not implimented in {\tt dplyr\_0.2}, will be implimented in {\tt dplyr\_0.3}.
+  Not implemented in {\tt dplyr\_0.2}, will be implemented in {\tt dplyr\_0.3}.
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1203,23 +1296,26 @@ follow.
 
 \hlcom{# workaround for dplyr_0.2, outer_join should be part of dplyr_0.3}
 \hlstd{my_outer_join} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{dfx}\hlstd{,} \hlkwc{dfy}\hlstd{,} \hlkwc{suffixes} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{".x"}\hlstd{,} \hlstr{".y"}\hlstd{),} \hlkwc{...}\hlstd{) \{}
-
-  \hlcom{# d1 <- left_join(batting_df, pitching_df, by = "playerID")}
-  \hlcom{# d2 <- left_join(pitching_df, batting_df, by = "playerID")}
   \hlstd{d1} \hlkwb{<-} \hlkwd{left_join}\hlstd{(dfx, dfy, ...)}
   \hlstd{d2} \hlkwb{<-} \hlkwd{left_join}\hlstd{(dfy, dfx, ...)}
 
   \hlkwd{names}\hlstd{(d1)} \hlkwb{<-} \hlkwd{names}\hlstd{(d1)} \hlopt{%>%}
-  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.x"}\hlstd{, suffixes[}\hlnum{1}\hlstd{],} \hlkwc{x} \hlstd{= .)}  \hlopt{%>%}
-  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.y"}\hlstd{, suffixes[}\hlnum{2}\hlstd{],} \hlkwc{x} \hlstd{= .)}
+               \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.x"}\hlstd{, suffixes[}\hlnum{1}\hlstd{],} \hlkwc{x} \hlstd{= .)}  \hlopt{%>%}
+               \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.y"}\hlstd{, suffixes[}\hlnum{2}\hlstd{],} \hlkwc{x} \hlstd{= .)}
   \hlkwd{names}\hlstd{(d2)} \hlkwb{<-} \hlkwd{names}\hlstd{(d2)} \hlopt{%>%}
-  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.y"}\hlstd{, suffixes[}\hlnum{1}\hlstd{],} \hlkwc{x} \hlstd{= .)}  \hlopt{%>%}
-  \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.x"}\hlstd{, suffixes[}\hlnum{2}\hlstd{],} \hlkwc{x} \hlstd{= .)}
+               \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.y"}\hlstd{, suffixes[}\hlnum{1}\hlstd{],} \hlkwc{x} \hlstd{= .)}  \hlopt{%>%}
+               \hlkwd{gsub}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}.x"}\hlstd{, suffixes[}\hlnum{2}\hlstd{],} \hlkwc{x} \hlstd{= .)}
 
   \hlstd{out} \hlkwb{<-} \hlstd{dplyr::}\hlkwd{union}\hlstd{(d1, d2)}
   \hlkwd{return}\hlstd{(out)}
 \hlstd{\}}
-
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\pagebreak
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{dplyr_outer} \hlkwb{<-} \hlkwd{my_outer_join}\hlstd{(batting_df, pitching_df,}
                              \hlkwd{c}\hlstd{(}\hlstr{".batting"}\hlstd{,} \hlstr{".pitching"}\hlstd{),}
                              \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
@@ -1263,14 +1359,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base           10  137.06    4.005
-## 2 dplyr           10   34.23    1.000
+## 1  base           10  143.78     3.96
+## 2 dplyr           10   36.31     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks, fragile]
   \frametitle{joining data sets}
   \framesubtitle{{\tt cross\_join} and {\tt right\_join}}
   \begin{itemize}
@@ -1297,7 +1393,13 @@ follow.
   \hlstd{out} \hlkwb{<-} \hlkwd{inner_join}\hlstd{(dfx2, dfy2,} \hlkwc{by} \hlstd{=} \hlstr{"special.id"}\hlstd{)} \hlopt{%>%} \hlkwd{select}\hlstd{(}\hlopt{-}\hlstd{special.id)}
   \hlkwd{return}\hlstd{(out)}
 \hlstd{\}}
-
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+  \pagebreak}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{dplyr_cross} \hlkwb{<-} \hlkwd{my_cross_join}\hlstd{(dfx, dfy)}
 
 \hlkwd{all.equal}\hlstd{(base_cross, dplyr_cross)}
@@ -1331,8 +1433,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base         1000   4.382    1.547
-## 2 dplyr         1000   2.832    1.000
+## 1  base         1000   4.493    1.599
+## 2 dplyr         1000   2.810    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1358,25 +1460,25 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old       new       
-## var1      0x99c6218 0x448e6538
+##           old        new      
+## var1      0x2b5df708 0x6d325a0
 ## 
 ## Changed attributes:
 ##           old       new       
-## row.names 0xee6a0a8 0x17099d98
+## row.names 0xc4f9af8 0x2b558c38
 \end{verbatim}
 \begin{alltt}
 \hlkwd{location}\hlstd{(this_df2)}
 \end{alltt}
 \begin{verbatim}
-## <0x1285fe20>
+## <0x12bf4fc0>
 ## Variables:
-##  * var1:      <0x448e6538>
-##  * var2:      <0x99bdb18 >
+##  * var1:      <0x6d325a0>
+##  * var2:      <0xec79aa0>
 ## Attributes:
-##  * names:     <0x1285fec8>
-##  * row.names: <0x46354e88>
-##  * class:     <0x87403d8 >
+##  * names:     <0x956fbf0 >
+##  * row.names: <0x12ee41c0>
+##  * class:     <0xcf117f8 >
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1401,14 +1503,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old       new       
-## var1      0x892c5a0 0x1de454d0
+##           old       new      
+## var1      0x93df068 0xc2b46f0
 ## 
 ## Changed attributes:
-##           old        new       
-## names     0x23a7bba0 0x8868c98 
-## class     0x17fffff8 0x1de05d10
-## row.names 0x67f1578  0x67f1890
+##           old       new       
+## names     0x8fa0f10 0x12672460
+## class     0xf93da80 0x2185d018
+## row.names 0xc8fa868 0xc8fab80
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1440,18 +1542,18 @@ follow.
   \begin{itemize}
     \item See {\tt vignette("window-functions", package = "dplyr")}
 
-    \item window functions are variations of aggreation functions.
+    \item window functions are variations of aggregation functions.
 
       \begin{itemize}
         \item Aggregation functions such as {\tt sum()} and {\tt median()} are
           maps between $\mathbb{R}^n \rightarrow \mathbb{R}^1$.
-        \item Window function are maps between $\mathbb{R}^n \rightarrow \mathbb{R}^n$.
+        \item Window function are maps between $\mathbb{R}^n \rightarrow \mathbb{R}^n.$
           Examples: {\tt cumsum()}, {\tt rank()}, {\tt lag()}
       \end{itemize} 
   \end{itemize} 
 \end{frame} 
 
-\begin{frame}[fragile]
+\begin{frame}[allowframebreaks,fragile]
   \frametitle{Window Functions}
   \framesubtitle{Examples}
 \begin{knitrout}\footnotesize
@@ -1482,6 +1584,13 @@ follow.
 ## 10 abbated01   1905    BSN 153 610  70 170  3
 ## ..       ...    ...    ... ... ... ... ... ..
 \end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\pagebreak 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# Within each player, rank each year by the number of games played}
 \hlstd{batting} \hlopt{%>%}
@@ -1505,6 +1614,13 @@ follow.
 ## 10 aaronha01   1956    ML1 153 609 106 200 26     13
 ## ..       ...    ...    ... ... ... ... ... ..    ...
 \end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\pagebreak 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# For each player, the proportion of years with more home runs than the prior}
 \hlcom{# year}
@@ -1529,6 +1645,13 @@ follow.
 ## 10 abbeych01   0.7500
 ## ..       ...      ...
 \end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\pagebreak 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# For each player, compute avg change in games played per year}
 \hlstd{batting} \hlopt{%>%}
@@ -1552,6 +1675,13 @@ follow.
 ## 10 aaronha01   1956    ML1 153 609 106 200 26        0
 ## ..       ...    ...    ... ... ... ... ... ..      ...
 \end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\pagebreak 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# For each player, find all when they played more games than average}
 \hlstd{batting} \hlopt{%>%}
@@ -1690,6 +1820,19 @@ What do you think?  Pros and Cons?
 %}}}
 
 \section{Wrap Up}%{{{
+
+\begin{frame}[fragile]
+  \frametitle{Other resources}
+  \begin{itemize}
+    \item Wickham's presentation at useR!2014: Data manipulation with dplyr,
+      \url{http://blog.revolutionanalytics.com/2014/06/user-2014-is-underway.html}
+
+    \item R Meetup - Hadley Wickham and Joe Cheng of RStudio return to BARUG.
+      \url{http://www.youtube.com/watch?v=qRSfxSRdL5Y}
+
+  \end{itemize}
+\end{frame} 
+
 \begin{frame}[fragile]
   \frametitle{Reproducibility}
   The data, code, sides, etc.\ all at \url{github.com/dewittpe/dplyr-demo}
