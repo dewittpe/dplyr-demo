@@ -11,7 +11,7 @@
 
 % preamble%{{{
 \setbeamersize{text margin left=5pt,text margin right=5pt}
-
+\usefonttheme{serif} 
 \usepackage{verbatim}
 
 \author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
@@ -194,7 +194,7 @@ class(wls_tbl_df)
   \frametitle{Data Printing}
 <<"data-printing">>=
 # print(wls_df)  # takes a long time, not helpful
-# head(wls_df)   # two many columns to be useful
+# head(wls_df)   # too many columns to be useful
 print(wls_tbl_df, n = 3)
 @
 \end{frame} 
@@ -209,6 +209,8 @@ print(wls_tbl_df, n = 3)
       nouns and function names should be verbs. Strive for names that are
       concise and meaningful (this is not easy!).'' - Hadley Wickham,
       \url{http://adv-r.had.co.nz/Style.html}
+
+    \item[]
 
     \item Verbs in {\tt dplyr} 
       \begin{itemize}
@@ -377,9 +379,9 @@ eng.lbls <- c("mounted below the wing", "mounted above the wing",
               "part of the wing root", "nacelle-mounted on the wing", 
               "mounted on the aft fuselage")
 str(mutate(wls_yr, 
-       SPEED_MPH = SPEED * 1.15078, # SPEED was in knots
-       ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls),
-       ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)))
+           SPEED_MPH = SPEED * 1.15078, # SPEED was in knots
+           ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls),
+           ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)))
 @
 \end{frame} 
 
@@ -388,10 +390,12 @@ str(mutate(wls_yr,
 <<>>=
 # dplyr::mutate is conceptually similar to base::within
 bnch <- 
-benchmark(base = within(wls_yr, {
-                        SPEED_MPH = SPEED * 1.15078
-                        ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls)
-                        ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)}),
+benchmark(base = within(wls_yr, 
+                        {
+                          SPEED_MPH = SPEED * 1.15078
+                          ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls)
+                          ENG_2_POS = factor(ENG_2_POS, 19:23, eng.lbls)
+                        }),
           dplyr = mutate(wls_yr, 
                          SPEED_MPH = SPEED * 1.15078, 
                          ENG_1_POS = factor(ENG_1_POS, 19:23, eng.lbls),
@@ -617,8 +621,16 @@ base_left <- person_df %>%
 dplyr_left <- person_df %>% 
               filter(birthState == "CO") %>% 
               left_join(x = ., pitching_df, by = "playerID") 
+@
+\end{frame} 
 
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt left\_join}} 
+<<>>= 
 all.equal(base_left, dplyr_left) 
+dim(person_df)
+dim(dplyr_inner)
 dim(dplyr_left)
 @ 
 \end{frame} 
@@ -702,7 +714,13 @@ base_outer <- merge(batting_df, pitching_df,
                     by = "playerID", all = TRUE,
                     suffixes = c(".batting", ".pitching")) %>% 
               tbl_df()
+@
+\end{frame} 
 
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
+<<>>=
 # workaround for dplyr_0.2, outer_join should be part of dplyr_0.3
 my_outer_join <- function(dfx, dfy, suffixes = c(".x", ".y"), ...) { 
   d1 <- left_join(dfx, dfy, ...)
@@ -880,12 +898,11 @@ changes(this_df, this_df2)
 \begin{frame}[fragile]
   \frametitle{Window Functions}
   \framesubtitle{Examples}
-  The following examples come from {\tt vignette("window-functions", "dplyr")}
 <<>>=
 batting <- Batting %>% tbl_df() %>% 
            select(playerID, yearID, teamID, G, AB:H, HR) 
 
-# For each player, find the two years with most hits
+# For each player, find the two years with most hits for one team
 batting %>% 
   group_by(playerID) %>%
   filter(min_rank(desc(H)) <= 2 & H > 0)
@@ -907,8 +924,8 @@ batting %>%
   \frametitle{Window Functions}
   \framesubtitle{Examples} 
 <<>>=
-# For each player, the proportion of years with more home runs than the prior
-#DRUG}DRUG} year
+# For each player, the proportion of years with more home runs than the 
+# prior year
 batting %>% 
   group_by(playerID) %>%
   mutate(more_hrs = HR > lag(HR)) %>%                 # Window function
@@ -1012,21 +1029,51 @@ batting %>%
   \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
   \framesubtitle{Examples} 
 
+
+  \[ -2 \log \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(
+  -\frac{1}{2\sigma^2} \left(y_i - \mu \right)^2 \right) \]
+
 <<"magrittr-examples">>=
 mu <- 1; sigma <- 5; N <- 5; y <- rnorm(N, mu, sigma)
 
-# -2 log likelihood, standard nested operations, i.e, infix notation
--2 * log((1/sqrt(2 * pi * sigma^2))^(N) * 
-         exp(-1/(2 * sigma^2) * sum((y - mu)^2)))
+# -2 log likelihood: 
+-2 * log(prod(dnorm(y, mu, sigma)))
 
+# or using the forward pipe
+y %>%
+dnorm(x = ., mu, sigma) %>%
+prod %>%
+log %>% 
+multiply_by(-2)
+@ 
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
+  \framesubtitle{Examples} 
+
+  \[ -2 \log \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(
+  -\frac{1}{2\sigma^2} \left(y_i - \mu \right)^2 \right) \]
+
+<<>>= 
+# -2 log likelihood, standard nested operations, i.e, infix notation 
+-2 * log(prod((1/sqrt(2 * pi * sigma^2)) * 
+              exp(-1/(2 * sigma^2) * (y - mu)^2)))
+@
+\end{frame} 
+
+\begin{frame}[fragile]
+ \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
+ \framesubtitle{Examples} 
+<<>>=
 # -2 log likelihood, using forward-piping, somewhat like postfix notation
 y %>% 
 subtract(mu) %>%
 raise_to_power(2) %>% 
-sum %>%
 divide_by(-2 * sigma^2) %>%
 exp %>%
-multiply_by((2 * pi * sigma^2)^(-N/2)) %>% 
+multiply_by((2 * pi * sigma^2)^(-1/2)) %>% 
+prod %>% 
 log %>%
 multiply_by(-2)
 @

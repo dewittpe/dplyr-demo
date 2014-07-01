@@ -60,7 +60,7 @@
 
 % preamble%{{{
 \setbeamersize{text margin left=5pt,text margin right=5pt}
-
+\usefonttheme{serif} 
 \usepackage{verbatim}
 
 \author{Peter DeWitt\\peter.dewitt@ucdenver.edu}
@@ -196,8 +196,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100  113.09    4.625
-## 2 dplyr          100   24.45    1.000
+## 1  base          100   48.43    4.017
+## 2 dplyr          100   12.05    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -243,7 +243,7 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# print(wls_df)  # takes a long time, not helpful}
-\hlcom{# head(wls_df)   # two many columns to be useful}
+\hlcom{# head(wls_df)   # too many columns to be useful}
 \hlkwd{print}\hlstd{(wls_tbl_df,} \hlkwc{n} \hlstd{=} \hlnum{3}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
@@ -296,6 +296,8 @@
       nouns and function names should be verbs. Strive for names that are
       concise and meaningful (this is not easy!).'' - Hadley Wickham,
       \url{http://adv-r.had.co.nz/Style.html}
+
+    \item[]
 
     \item Verbs in {\tt dplyr} 
       \begin{itemize}
@@ -360,8 +362,8 @@
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   0.007        1
-## 2 dplyr          100   0.028        4
+## 1  base          100   0.003    1.000
+## 2 dplyr          100   0.013    4.333
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -679,8 +681,8 @@ conditions are supplied they are combined with ‘\&’.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   7.977    5.364
-## 2 dplyr          100   1.487    1.000
+## 1  base          100   3.607     5.25
+## 2 dplyr          100   0.687     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -698,9 +700,9 @@ mutate: add new columns. Multiple inputs create multiple columns.
               \hlstr{"part of the wing root"}\hlstd{,} \hlstr{"nacelle-mounted on the wing"}\hlstd{,}
               \hlstr{"mounted on the aft fuselage"}\hlstd{)}
 \hlkwd{str}\hlstd{(}\hlkwd{mutate}\hlstd{(wls_yr,}
-       \hlkwc{SPEED_MPH} \hlstd{= SPEED} \hlopt{*} \hlnum{1.15078}\hlstd{,} \hlcom{# SPEED was in knots}
-       \hlkwc{ENG_1_POS} \hlstd{=} \hlkwd{factor}\hlstd{(ENG_1_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls),}
-       \hlkwc{ENG_2_POS} \hlstd{=} \hlkwd{factor}\hlstd{(ENG_2_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls)))}
+           \hlkwc{SPEED_MPH} \hlstd{= SPEED} \hlopt{*} \hlnum{1.15078}\hlstd{,} \hlcom{# SPEED was in knots}
+           \hlkwc{ENG_1_POS} \hlstd{=} \hlkwd{factor}\hlstd{(ENG_1_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls),}
+           \hlkwc{ENG_2_POS} \hlstd{=} \hlkwd{factor}\hlstd{(ENG_2_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls)))}
 \end{alltt}
 \begin{verbatim}
 ## Classes 'tbl_df', 'tbl' and 'data.frame':	142911 obs. of  10 variables:
@@ -726,10 +728,12 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \begin{alltt}
 \hlcom{# dplyr::mutate is conceptually similar to base::within}
 \hlstd{bnch} \hlkwb{<-}
-\hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{within}\hlstd{(wls_yr, \{}
-                        \hlstd{SPEED_MPH} \hlkwb{=} \hlstd{SPEED} \hlopt{*} \hlnum{1.15078}
-                        \hlstd{ENG_1_POS} \hlkwb{=} \hlkwd{factor}\hlstd{(ENG_1_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls)}
-                        \hlstd{ENG_2_POS} \hlkwb{=} \hlkwd{factor}\hlstd{(ENG_2_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls)\}),}
+\hlkwd{benchmark}\hlstd{(}\hlkwc{base} \hlstd{=} \hlkwd{within}\hlstd{(wls_yr,}
+                        \hlstd{\{}
+                          \hlstd{SPEED_MPH} \hlkwb{=} \hlstd{SPEED} \hlopt{*} \hlnum{1.15078}
+                          \hlstd{ENG_1_POS} \hlkwb{=} \hlkwd{factor}\hlstd{(ENG_1_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls)}
+                          \hlstd{ENG_2_POS} \hlkwb{=} \hlkwd{factor}\hlstd{(ENG_2_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls)}
+                        \hlstd{\}),}
           \hlkwc{dplyr} \hlstd{=} \hlkwd{mutate}\hlstd{(wls_yr,}
                          \hlkwc{SPEED_MPH} \hlstd{= SPEED} \hlopt{*} \hlnum{1.15078}\hlstd{,}
                          \hlkwc{ENG_1_POS} \hlstd{=} \hlkwd{factor}\hlstd{(ENG_1_POS,} \hlnum{19}\hlopt{:}\hlnum{23}\hlstd{, eng.lbls),}
@@ -739,8 +743,8 @@ mutate: add new columns. Multiple inputs create multiple columns.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   5.958    1.000
-## 2 dplyr          100   5.979    1.004
+## 1  base          100   2.650    1.000
+## 2 dplyr          100   2.665    1.006
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -826,8 +830,8 @@ inputs create multiple output summaries.  (Two spellings:
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100  82.651    54.81
-## 2 dplyr          100   1.508     1.00
+## 1  base          100  36.233    53.84
+## 2 dplyr          100   0.673     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1095,8 +1099,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   4.305    8.768
-## 2 dplyr          100   0.491    1.000
+## 1  base          100   1.984     9.97
+## 2 dplyr          100   0.199     1.00
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1123,11 +1127,33 @@ follow.
 \hlstd{dplyr_left} \hlkwb{<-} \hlstd{person_df} \hlopt{%>%}
               \hlkwd{filter}\hlstd{(birthState} \hlopt{==} \hlstr{"CO"}\hlstd{)} \hlopt{%>%}
               \hlkwd{left_join}\hlstd{(}\hlkwc{x} \hlstd{= ., pitching_df,} \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
 
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt left\_join}} 
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlkwd{all.equal}\hlstd{(base_left, dplyr_left)}
 \end{alltt}
 \begin{verbatim}
 ## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(person_df)}
+\end{alltt}
+\begin{verbatim}
+## [1] 18125    35
+\end{verbatim}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(dplyr_inner)}
+\end{alltt}
+\begin{verbatim}
+## [1] 297  64
 \end{verbatim}
 \begin{alltt}
 \hlkwd{dim}\hlstd{(dplyr_left)}
@@ -1160,8 +1186,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base          100   4.659    2.988
-## 2 dplyr          100   1.559    1.000
+## 1  base          100   2.334    4.038
+## 2 dplyr          100   0.578    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1263,23 +1289,23 @@ follow.
 ## 9     11592 radtkja01         NA         NA      1913
 ## 10    10411 niehobe01         NA         NA      1884
 ## 11    10226 myattge01 myattge01m         NA      1914
-## 12    10155 murphbu01         NA         NA      1895
-## 13    10069 moutoja01         NA         NA      1968
-## 14     9572  metzle01         NA         NA      1899
-## 15     9402 mcnambo01         NA         NA      1916
-## 16     8264  lindja01         NA         NA      1946
-## 17     8088   leedu01         NA         NA      1899
+## 12    10069 moutoja01         NA         NA      1968
+## 13     9572  metzle01         NA         NA      1899
+## 14     9402 mcnambo01         NA         NA      1916
+## 15     8264  lindja01         NA         NA      1946
+## 16     8088   leedu01         NA         NA      1899
+## 17     7041 johnsma02         NA         NA      1975
 ## 18     7110 jonesco02         NA         NA      1907
-## 19     7041 johnsma02         NA         NA      1975
-## 20     6049 heathto01         NA         NA      1913
-## 21     5946 hartzro01         NA         NA      1881
-## 22     5470 grempbu01         NA         NA      1919
-## 23     4690 fredejo01         NA         NA      1902
-## 24     3434 deideji01         NA         NA      1949
-## 25     3329 davisik01         NA         NA      1895
-## 26     2905 cottich01 cottich01m         NA      1936
-## 27     2104 caprani01         NA         NA      1958
-## 28     1440 bradlja01         NA         NA      1893
+## 19     6049 heathto01         NA         NA      1913
+## 20     5946 hartzro01         NA         NA      1881
+## 21     5470 grempbu01         NA         NA      1919
+## 22     4690 fredejo01         NA         NA      1902
+## 23     3434 deideji01         NA         NA      1949
+## 24     3329 davisik01         NA         NA      1895
+## 25     2905 cottich01 cottich01m         NA      1936
+## 26     2104 caprani01         NA         NA      1958
+## 27     1440 bradlja01         NA         NA      1893
+## 28    10155 murphbu01         NA         NA      1895
 ## 29       54 adamsbu01         NA         NA      1915
 ## Variables not shown: birthMonth (int), birthDay (int),
 ##   birthCountry (chr), birthState (chr), birthCity (chr),
@@ -1310,7 +1336,17 @@ follow.
                     \hlkwc{by} \hlstd{=} \hlstr{"playerID"}\hlstd{,} \hlkwc{all} \hlstd{=} \hlnum{TRUE}\hlstd{,}
                     \hlkwc{suffixes} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{".batting"}\hlstd{,} \hlstr{".pitching"}\hlstd{))} \hlopt{%>%}
               \hlkwd{tbl_df}\hlstd{()}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
 
+\begin{frame}[fragile]
+  \frametitle{joining data sets}
+  \framesubtitle{{\tt outer\_join}}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlcom{# workaround for dplyr_0.2, outer_join should be part of dplyr_0.3}
 \hlstd{my_outer_join} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{dfx}\hlstd{,} \hlkwc{dfy}\hlstd{,} \hlkwc{suffixes} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{".x"}\hlstd{,} \hlstr{".y"}\hlstd{),} \hlkwc{...}\hlstd{) \{}
   \hlstd{d1} \hlkwb{<-} \hlkwd{left_join}\hlstd{(dfx, dfy, ...)}
@@ -1380,8 +1416,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base           10  138.48    3.953
-## 2 dplyr           10   35.03    1.000
+## 1  base           10   64.39    3.396
+## 2 dplyr           10   18.96    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1458,8 +1494,8 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ##    test replications elapsed relative
-## 1  base         1000   4.908    1.644
-## 2 dplyr         1000   2.986    1.000
+## 1  base         1000   1.947    1.513
+## 2 dplyr         1000   1.287    1.000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1486,24 +1522,24 @@ follow.
 \begin{verbatim}
 ## Changed variables:
 ##           old        new      
-## var1      0x10d3c660 0x94764a8
+## var1      0x42c7e4a8 0xb1555b0
 ## 
 ## Changed attributes:
 ##           old        new       
-## row.names 0x548836f0 0x548833d8
+## row.names 0x19db2ca8 0x1d2feb28
 \end{verbatim}
 \begin{alltt}
 \hlkwd{location}\hlstd{(this_df2)}
 \end{alltt}
 \begin{verbatim}
-## <0x10988118>
+## <0x3f716b0>
 ## Variables:
-##  * var1:      <0x94764a8 >
-##  * var2:      <0x10d365b0>
+##  * var1:      <0xb1555b0 >
+##  * var2:      <0x3f8c0288>
 ## Attributes:
-##  * names:     <0x109881c0>
-##  * row.names: <0x4dc1430 >
-##  * class:     <0x69a2c38 >
+##  * names:     <0x3f71758 >
+##  * row.names: <0x1a81fb50>
+##  * class:     <0x700e778 >
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1528,14 +1564,14 @@ follow.
 \end{alltt}
 \begin{verbatim}
 ## Changed variables:
-##           old       new       
-## var1      0xb77dea8 0x1fa8d620
+##           old       new      
+## var1      0xc7acdc0 0xf935e98
 ## 
 ## Changed attributes:
 ##           old        new       
-## names     0xa70c070  0x972d510 
-## class     0x1f3e35e8 0x1fa79298
-## row.names 0x9cba5d8  0x9cba8f0
+## names     0xc8c86d8  0x1386a3f8
+## class     0x34ae1620 0xf923f90 
+## row.names 0x34a37810 0x34a37b28
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1581,14 +1617,13 @@ follow.
 \begin{frame}[fragile]
   \frametitle{Window Functions}
   \framesubtitle{Examples}
-  The following examples come from {\tt vignette("window-functions", "dplyr")}
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{batting} \hlkwb{<-} \hlstd{Batting} \hlopt{%>%} \hlkwd{tbl_df}\hlstd{()} \hlopt{%>%}
            \hlkwd{select}\hlstd{(playerID, yearID, teamID, G, AB}\hlopt{:}\hlstd{H, HR)}
 
-\hlcom{# For each player, find the two years with most hits}
+\hlcom{# For each player, find the two years with most hits for one team}
 \hlstd{batting} \hlopt{%>%}
   \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
   \hlkwd{filter}\hlstd{(}\hlkwd{min_rank}\hlstd{(}\hlkwd{desc}\hlstd{(H))} \hlopt{<=} \hlnum{2} \hlopt{&} \hlstd{H} \hlopt{>} \hlnum{0}\hlstd{)}
@@ -1652,8 +1687,8 @@ follow.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# For each player, the proportion of years with more home runs than the prior}
-\hlcom{#DRUG\}DRUG\} year}
+\hlcom{# For each player, the proportion of years with more home runs than the }
+\hlcom{# prior year}
 \hlstd{batting} \hlopt{%>%}
   \hlkwd{group_by}\hlstd{(playerID)} \hlopt{%>%}
   \hlkwd{mutate}\hlstd{(}\hlkwc{more_hrs} \hlstd{= HR} \hlopt{>} \hlkwd{lag}\hlstd{(HR))} \hlopt{%>%}                 \hlcom{# Window function}
@@ -1817,35 +1852,79 @@ follow.
   \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
   \framesubtitle{Examples} 
 
+
+  \[ -2 \log \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(
+  -\frac{1}{2\sigma^2} \left(y_i - \mu \right)^2 \right) \]
+
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mu} \hlkwb{<-} \hlnum{1}\hlstd{; sigma} \hlkwb{<-} \hlnum{4}\hlstd{; N} \hlkwb{<-} \hlnum{5}\hlstd{; y} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(N, mu, sigma)}
+\hlstd{mu} \hlkwb{<-} \hlnum{1}\hlstd{; sigma} \hlkwb{<-} \hlnum{5}\hlstd{; N} \hlkwb{<-} \hlnum{5}\hlstd{; y} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(N, mu, sigma)}
 
-\hlcom{# -2 log likelihood, standard nested operations, i.e, infix notation}
-\hlopt{-}\hlnum{2} \hlopt{*} \hlkwd{log}\hlstd{((}\hlnum{1}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{))}\hlopt{^}\hlstd{(N)} \hlopt{*} \hlkwd{exp}\hlstd{(}\hlopt{-}\hlnum{1}\hlopt{/}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{*} \hlkwd{sum}\hlstd{((y} \hlopt{-} \hlstd{mu)}\hlopt{^}\hlnum{2}\hlstd{)))}
+\hlcom{# -2 log likelihood: }
+\hlopt{-}\hlnum{2} \hlopt{*} \hlkwd{log}\hlstd{(}\hlkwd{prod}\hlstd{(}\hlkwd{dnorm}\hlstd{(y, mu, sigma)))}
 \end{alltt}
 \begin{verbatim}
-## [1] 29.03
+## [1] 31.91
 \end{verbatim}
+\begin{alltt}
+\hlcom{# or using the forward pipe}
+\hlstd{y} \hlopt{%>%}
+\hlkwd{dnorm}\hlstd{(}\hlkwc{x} \hlstd{= ., mu, sigma)} \hlopt{%>%}
+\hlstd{prod} \hlopt{%>%}
+\hlstd{log} \hlopt{%>%}
+\hlkwd{multiply_by}\hlstd{(}\hlopt{-}\hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 31.91
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+  \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
+  \framesubtitle{Examples} 
+
+  \[ -2 \log \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(
+  -\frac{1}{2\sigma^2} \left(y_i - \mu \right)^2 \right) \]
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# -2 log likelihood, standard nested operations, i.e, infix notation }
+\hlopt{-}\hlnum{2} \hlopt{*} \hlkwd{log}\hlstd{(}\hlkwd{prod}\hlstd{((}\hlnum{1}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{))} \hlopt{*}
+              \hlkwd{exp}\hlstd{(}\hlopt{-}\hlnum{1}\hlopt{/}\hlstd{(}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{*} \hlstd{(y} \hlopt{-} \hlstd{mu)}\hlopt{^}\hlnum{2}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## [1] 31.91
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame} 
+
+\begin{frame}[fragile]
+ \frametitle{{\tt magrittr}: a foward-pipe operator for {\tt R}}
+ \framesubtitle{Examples} 
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# -2 log likelihood, using forward-piping, somewhat like postfix notation}
 \hlstd{y} \hlopt{%>%}
 \hlkwd{subtract}\hlstd{(mu)} \hlopt{%>%}
 \hlkwd{raise_to_power}\hlstd{(}\hlnum{2}\hlstd{)} \hlopt{%>%}
-\hlstd{sum} \hlopt{%>%}
 \hlkwd{divide_by}\hlstd{(}\hlopt{-}\hlnum{2} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{%>%}
 \hlstd{exp} \hlopt{%>%}
-\hlkwd{multiply_by}\hlstd{((}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{^}\hlstd{(}\hlopt{-}\hlstd{N}\hlopt{/}\hlnum{2}\hlstd{))} \hlopt{%>%}
+\hlkwd{multiply_by}\hlstd{((}\hlnum{2} \hlopt{*} \hlstd{pi} \hlopt{*} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{^}\hlstd{(}\hlopt{-}\hlnum{1}\hlopt{/}\hlnum{2}\hlstd{))} \hlopt{%>%}
+\hlstd{prod} \hlopt{%>%}
 \hlstd{log} \hlopt{%>%}
 \hlkwd{multiply_by}\hlstd{(}\hlopt{-}\hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 29.03
+## [1] 31.91
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-What do you think?  Pros and Cons?
 
 \end{frame} 
 %}}}
@@ -1884,12 +1963,12 @@ What do you think?  Pros and Cons?
 ## other attached packages:
 ## [1] rbenchmark_1.0.0 dplyr_0.2        magrittr_1.0.1  
 ## [4] knitr_1.6        vimcom_0.9-93    setwidth_1.0-3  
-## [7] colorout_1.0-3  
+## [7] colorout_1.0-2  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] assertthat_0.1  codetools_0.2-8 digest_0.6.4   
 ##  [4] evaluate_0.5.5  formatR_0.10    highr_0.3      
-##  [7] parallel_3.1.0  Rcpp_0.11.2     stringr_0.6.2  
+##  [7] parallel_3.1.0  Rcpp_0.11.1     stringr_0.6.2  
 ## [10] tools_3.1.0
 \end{verbatim}
 \end{kframe}
